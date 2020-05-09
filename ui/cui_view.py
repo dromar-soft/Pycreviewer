@@ -21,7 +21,12 @@ class CuiView(object):
     def ui_main_thread(self):
         
         logger.info("ui thread start")
-        self.presenter.send_start_request("./examples/c_files")
+
+        sourceFolder = None
+        while not sourceFolder:
+            print u'input source folder'
+            sourceFolder = raw_input('>> ')
+        self.presenter.send_start_request(sourceFolder)
         
         t = Terminal()
         with t.cbreak():
