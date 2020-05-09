@@ -4,7 +4,6 @@ from threading import (Event, Thread)
 import queue
 import time
 from blessed import Terminal
-import presenter
 
 handler = StreamHandler()
 handler.setLevel(INFO)
@@ -24,8 +23,8 @@ class CuiView(object):
 
         sourceFolder = None
         while not sourceFolder:
-            print u'input source folder'
-            sourceFolder = raw_input('>> ')
+            print ('input source folder')
+            sourceFolder = input('>> ')
         self.presenter.send_start_request(sourceFolder)
         
         t = Terminal()
