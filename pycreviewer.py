@@ -1,25 +1,23 @@
 # coding: UTF-8
 from logging import (getLogger, StreamHandler, INFO, Formatter)
 from threading import (Event, Thread)
+from pathlib import Path
 from cparser import c_parser_wrapper,ast_analyser
 from ui import cui_view,presenter
 import time 
 import os
 
 
-def code_review_file():
+def code_review_file(source_path: str):
 
+    print("Executing: "+source_path)
     time.sleep(0.5)
     return "ALL OK."
 
-def get_c_source_list(source_folder):
-    found = []
-    for root, dirs, files in os.walk(source_folder):
-        for filename in files:
-            found.append(os.path.join(root, filename))   # ファイルのみ再帰でいい場合はここまででOK
-        # for dirname in dirs:
-        #     found.append(os.path.join(root, dirname))    # サブディレクトリまでリストに含めたい場合はこれも書く
-    return found
+def search_csource_abs_paths(source_folder: str) ->list:
+    p = Path(source_folder)
+    source_path_list = list(p.glob("**/*.c"))
+    return [str(path.absolute()) for path in source_path_list]
 
 if __name__ == "__main__":
 
@@ -42,18 +40,17 @@ if __name__ == "__main__":
             pass
 
     #create file list
-    source_list = get_c_source_list(source_folder)
-    print(source_list)
+    source_file_paths = search_csource_abs_paths(source_folder)
     
     # #for each file
     #     #execute codereview
     #     #output results in ui thread
-    #     #if user cancelled process from ui thread, then break for loop
+    #     #if user cancelled process from cui , then break for loop
     # #end
-    while True:
+    for source_file_path in source_file_paths:
         recvMsg = myPresenter.recieve_request(timeout=0.1)
         if not recvMsg:
-            results = code_review_file()
+            results = code_review_file(source_file_path)
             myPresenter.send_review_results(results)
         elif recvMsg.id == "cancel_request":
             break
