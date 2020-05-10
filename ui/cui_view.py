@@ -34,7 +34,7 @@ class CuiView(object):
                 if not k :
                     recvMsg = self.presenter.recieve_response_from_model(timeout=0.1)
                     if recvMsg is not None:
-                        logger.info("id:"+recvMsg.id+ " data:"+recvMsg.data)
+                        logger.info("id:"+recvMsg.id+ " data:"+str(recvMsg.data))
                 elif k.is_sequence:
                     if k.name == 'KEY_ESCAPE':
                         self.presenter.send_cancel_request()
