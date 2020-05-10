@@ -32,7 +32,7 @@ class CuiView(object):
             while True:
                 k = t.inkey(timeout=0.1)
                 if not k :
-                    recvMsg = self.presenter.recieve_response(timeout=0.1)
+                    recvMsg = self.presenter.recieve_response_from_model(timeout=0.1)
                     if recvMsg is not None:
                         logger.info("id:"+recvMsg.id+ " data:"+recvMsg.data)
                 elif k.is_sequence:

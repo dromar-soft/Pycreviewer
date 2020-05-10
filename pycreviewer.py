@@ -3,7 +3,7 @@ from logging import (getLogger, StreamHandler, INFO, Formatter)
 from threading import (Event, Thread)
 from pathlib import Path
 from cparser import c_parser_wrapper,ast_analyser
-from ui import cui_view,presenter
+from ui import cui_view,view_model_communication
 import time 
 import os
 
@@ -23,14 +23,14 @@ if __name__ == "__main__":
 
     print("pycreviewer start")
 
-    myPresenter = presenter.Presenter()
-    myView = cui_view.CuiView(myPresenter)
-    myView.startup()
+    communication = view_model_communication.ViewModelCommunicaton()
+    view = cui_view.CuiView(communication)
+    view.startup()
 
     #wait user input sourcefolder in ui thread
     source_folder = None
     while True:
-        recvMsg = myPresenter.recieve_request(timeout=0.1)
+        recvMsg = communication.recieve_request_from_view(timeout=0.1)
         if not recvMsg:
             pass
         elif recvMsg.id == "start_request":
@@ -48,10 +48,10 @@ if __name__ == "__main__":
     #     #if user cancelled process from cui , then break for loop
     # #end
     for source_file_path in source_file_paths:
-        recvMsg = myPresenter.recieve_request(timeout=0.1)
+        recvMsg = communication.recieve_request_from_view(timeout=0.1)
         if not recvMsg:
             results = code_review_file(source_file_path)
-            myPresenter.send_review_results(results)
+            communication.send_review_results(results)
         elif recvMsg.id == "cancel_request":
             break
         else:

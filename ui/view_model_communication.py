@@ -1,6 +1,9 @@
 import queue
 
-class Presenter(object):
+class ViewModelCommunicaton(object):
+    """
+    ViewModelCommunicaton provides thread safe communication between view class and model class.
+    """
 
     def __init__(self):
         self.model_to_view_msg = queue.Queue()
@@ -26,14 +29,14 @@ class Presenter(object):
         msg = Message("cancel_response", None)
         self.model_to_view_msg.put(msg)
 
-    def recieve_request(self, timeout):
+    def recieve_request_from_view(self, timeout):
         try:
             msg = self.view_to_model_msg.get(timeout=timeout)
             return msg
         except queue.Empty:
             return None
     
-    def recieve_response(self, timeout):
+    def recieve_response_from_model(self, timeout):
         try:
             msg = self.model_to_view_msg.get(timeout=timeout)
             return msg
