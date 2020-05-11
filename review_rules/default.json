@@ -1,0 +1,16 @@
+{
+    "version": "0.1.0",
+    "conditions":{
+        "static_variable_prefix":"m_",
+        "global_variable_prefix":"m_",
+        "variable_length_min":2,
+        "comparison_operator_constant":"left",
+        "reculsive_call":true,
+        "function_black_list":[
+            "malloc",
+            "free"
+        ],
+        "no_break_in_switch": true,
+        "no)default_in_swtich":true
+    }
+}
