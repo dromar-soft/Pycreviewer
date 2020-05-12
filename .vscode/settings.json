@@ -1,6 +1,16 @@
 {
-    "python.pythonPath": "/Users/takao/.pyenv/versions/3.8.2/bin/python",
+    "python.pythonPath": "/Users/takao/.pyenv/shims/python",
     "python.autoComplete.extraPaths": [
-        "/Library/Python/2.7/site-packages/pycparser"
+        "/Users/takao/.pyenv/versions/3.8.2/site-packages/pycparser"
     ],
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        "./review_rules",
+        "-p",
+        "test_*.py"
+    ],
+    "python.testing.pytestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.unittestEnabled": true,
 }

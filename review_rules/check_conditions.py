@@ -5,9 +5,16 @@ class CheckConditions():
     CheckConditions class provide functions to decode JSON file 
     and refer to the setting conditions of various check rules.
     """
-    def __init__(self, file_path:str):
+    def __load__(self, file_path:str):
         io = open(file_path, 'r')
-        self.json = json.load(io)
+        self.json_dict= json.load(io)
+        io.close()
 
-    def isInvalid(self)->bool:
-            return True
+    def __init__(self, file_path:str):
+        self.__load__(file_path)
+
+    def Version(self):
+        if 'version' in self.json_dict:
+            return self.json_dict["version"]
+        else:
+            return ''
