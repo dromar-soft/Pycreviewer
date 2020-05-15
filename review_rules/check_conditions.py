@@ -25,6 +25,19 @@ class CheckConditions():
         else:
             return 0
 
+    def __ListValueInCondtions__(self, key:str)->list:
+        if key in self.__conditionsKey__():
+            return self.__conditionsKey__()[key]
+        else:
+            return []
+    
+    def __BoolValueInCondtions__(self, key:str)->bool:
+        if key in self.__conditionsKey__():
+            return self.__conditionsKey__()[key]
+        else:
+            return False
+
+
     def __conditionsKey__(self):
         if 'conditions' in self.json_dict:
             return self.json_dict['conditions']
@@ -45,4 +58,15 @@ class CheckConditions():
 
     def VariableLengthMin(self)->int:
         return self.__IntValueInCondtions__('variable_length_min')
-        
+    
+    def FunctionBlackList(self)->list:
+        return self.__ListValueInCondtions__('function_black_list')
+    
+    def NoBreakInSwitch(self)->bool:
+        return self.__BoolValueInCondtions__('no_break_in_switch')
+
+    def NoDefaultInSwitch(self)->bool:
+        return self.__BoolValueInCondtions__('no_default_in_switch')
+
+    def ReculsiveCall(self)->bool:
+        return self.__BoolValueInCondtions__('reculsive_call')
