@@ -6,7 +6,7 @@
     "python.testing.unittestArgs": [
         "-v",
         "-s",
-        "./review_rules",
+        "./tests",
         "-p",
         "test_*.py"
     ],

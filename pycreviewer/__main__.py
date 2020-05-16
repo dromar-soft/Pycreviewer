@@ -2,19 +2,26 @@
 from logging import (getLogger, StreamHandler, INFO, Formatter)
 from threading import (Event, Thread)
 from pathlib import Path
-from cparser import c_parser_wrapper,ast_analyser
-from review_rules import review_rules
-from ui import cui_view,view_model_communication
 import time 
 import os
+
+print(__file__)
+
+import pycreviewer
+from .ast_analyser import AstAnalyser
+from .c_parser_wrapper import parse
+from .check_conditions import CheckConditions
+from .cui_view import CuiView
+from .view_model_communication import ViewModelCommunicaton
+from .coding_rules import CheckResult, CodinfgRules
 
 
 def execute_code_review(source_path: str) ->list:
 
     print("Executing: "+source_path)
-    ast = c_parser_wrapper.parse(filepath=source_path,cpp_args=['-E', r'-Icparser/utils/fake_libc_include'])
-    analyser = ast_analyser.AstAnalyser(ast)
-    rules = review_rules.ReviewRules(analyser)
+    ast = parse(filepath=source_path,cpp_args=['-E', r'-Ipycreviewer/utils/fake_libc_include'])
+    analyser = AstAnalyser(ast)
+    rules = CodinfgRules(analyser, CheckConditions('./default.json'))
     results = rules.check()
     return results
 
@@ -27,8 +34,8 @@ if __name__ == "__main__":
 
     print("pycreviewer start")
 
-    communication = view_model_communication.ViewModelCommunicaton()
-    view = cui_view.CuiView(communication)
+    communication = ViewModelCommunicaton()
+    view = CuiView(communication)
     view.startup()
 
     #wait user input sourcefolder in ui thread
