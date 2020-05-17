@@ -1,7 +1,7 @@
 print("pycreviewer imported")
 
-from . import ast_analyser
-from . import c_parser_wrapper
+from . import source_file_parser
+from . import source_code
 from . import check_conditions
 from . import coding_rules
 from . import cui_view
