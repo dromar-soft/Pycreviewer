@@ -8,8 +8,8 @@ import os
 print(__file__)
 
 import pycreviewer
-from .ast_analyser import AstAnalyser
-from .c_parser_wrapper import parse
+from .source_code import SourceCode
+from .source_file_parser import parse
 from .check_conditions import CheckConditions
 from .cui_view import CuiView
 from .view_model_communication import ViewModelCommunicaton
@@ -20,8 +20,8 @@ def execute_code_review(source_path: str) ->list:
 
     print("Executing: "+source_path)
     ast = parse(filepath=source_path,cpp_args=['-E', r'-Ipycreviewer/utils/fake_libc_include'])
-    analyser = AstAnalyser(ast)
-    rules = CodinfgRules(analyser, CheckConditions('./default.json'))
+    code = SourceCode(ast)
+    rules = CodinfgRules(code, CheckConditions('./default.json'))
     results = rules.check()
     return results
 

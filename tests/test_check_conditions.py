@@ -7,7 +7,6 @@ class TestCheckConditions(unittest.TestCase):
     """check_conditionsクラステストを記述するクラス"""
 
     def test_Version_valid(self):
-        print(__file__)
         obj = check_conditions.CheckConditions("./test_data/default.json")
         self.assertEqual(obj.Version(), "0.1.0")
 
