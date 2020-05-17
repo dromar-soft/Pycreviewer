@@ -1,5 +1,5 @@
-from . import check_conditions
-from . import ast_analyser
+from .check_conditions import CheckConditions
+from .source_code import SourceCode 
 
 class CheckResult(object):
     """
@@ -20,7 +20,7 @@ class CodinfgRules(object):
     チェック対象となるコード情報は、AstAnaysisオブジェクトを参照し取得する。
     各種ルールに対する詳細なチェック条件を取得するために、CodgingRulesクラスは、CheckConditionクラスを参照する。
     """
-    def __init__(self, code:ast_analyser.AstAnalyser, condtions:check_conditions.CheckConditions):
+    def __init__(self, code:SourceCode, condtions:CheckConditions):
         self.code = code
         self.condtions = condtions
 
