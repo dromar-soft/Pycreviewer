@@ -28,7 +28,12 @@ class SourceCode(object):
         """
         定義された関数の一覧を返す
         """
-        return []
+        ret = []
+        for ext in self.ast:
+            if(isinstance(ext, c_ast.FuncDef)):
+                function = DefinedFunction(ext.decl.name, '', '', ext.coord)
+                ret.append(function)
+        return ret
 
     def StaticValiables(self)->list:
         """
