@@ -76,12 +76,20 @@ class SourceCode(object):
         """
         return []
 
-    def SearchReculsiveFunction(self)->list:
+    def SearchReculsiveFunctionCall(self)->list:
         """
         再起呼び出し関数を検索する
         """
-        return []
-
+        ret = []
+        for ext in self.ast:
+            if(isinstance(ext, c_ast.FuncDef)):
+                    funcname = ext.decl.name
+                    v = FuncCallVisitor(funcname)
+                    v.visit(self.ast)
+                    for node in v.visitedList():
+                        funccall = FunctionCall(funcname, node.name.coord)
+                        ret.append(funccall)
+        return ret
 class Coord(object):
     """
     Coordクラスは、ソースコードの座標情報を抽象化したデータクラス
@@ -108,6 +116,18 @@ class DefinedFunction(object):
     def Coord(self):
         return self.coord
 
+class FunctionCall(object):
+    """
+    FunctionCallクラスは、関数呼び出し情報を抽象化するデータクラス
+    """
+    def __init__(self, name:str,coord):
+        self.name = name
+        self.coord = coord
+    def Name(self)->str:
+        return self.name
+    def Coord(self):
+        return self.coord
+
 # class Switch(object):
 #     """
 #     Switchクラスは、Switch構文情報を抽象化するデータクラス
@@ -129,6 +149,24 @@ class Valiable(object):
         return self.coord
 
 
+class FuncCallVisitor(c_ast.NodeVisitor):
+    """
+    FuncCallVisitorクラスはc_astモジュールのNodeVisitorクラスを継承し、
+    astルートオブジェクトから、指定した関数名のFuncCallノードを再起的に検索する機能を提供する。
+    """
+    def __init__(self, funcname):
+        self.funcname = funcname
+        self.visited = []
+
+    def visit_FuncCall(self, node):
+        if node.name.name == self.funcname:
+            self.visited.append(node)
+        # Visit args in case they contain more func calls.
+        if node.args:
+            self.visit(node.args)
+    
+    def visitedList(self):
+        return self.visited
 
     # def print_ext_class_name(filename):
     #     ast = parse_file(filename, use_cpp=True,

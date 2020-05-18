@@ -51,3 +51,19 @@ class TestSourceCode(unittest.TestCase):
         target = SourceCode(self.none_ast)
         functions = target.DefinedFunctions()
         self.assertEqual(functions, [])
+
+    def test_SearchReculsiveFunctionCall_valid(self):
+        target = SourceCode(self.valid_ast)
+        funccall = target.SearchReculsiveFunctionCall()
+        self.assertEqual(funccall[0].Name(), 'g_function_def1')
+        self.assertEqual(funccall[1].Name(), 'g_function_def1')
+        self.assertEqual(funccall[2].Name(), 'g_function_def1')
+        self.assertEqual(funccall[3].Name(), 'g_function_def1')
+        self.assertEqual(funccall[4].Name(), 'g_function_def1')
+        self.assertEqual(funccall[5].Name(), 'g_function_def1')
+        self.assertEqual(len(funccall), 6)
+    
+    def test_SearchReculsiveFunctionCall_None(self):
+        target = SourceCode(self.none_ast)
+        steps = target.SearchReculsiveFunctionCall()
+        self.assertEqual(steps, [])
