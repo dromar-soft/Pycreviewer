@@ -20,10 +20,22 @@ class TestSourceCode(unittest.TestCase):
     def test_StaticValiables_valid(self):
         target = SourceCode(self.valid_ast)
         valiables = target.StaticValiables()
-        self.assertEqual(valiables[0].Name(), 'm_var_1')
-        self.assertEqual(valiables[1].Name(), 'm_var_2')
+        self.assertEqual(valiables[0].Name(), 'm_int_val1')
+        self.assertEqual(valiables[1].Name(), 'm_const_long_val2')
+        self.assertEqual(valiables[2].Name(),'m_volatile_char_val3')
     def test_StaticValiables_None(self):
         target = SourceCode(self.none_ast)
         valiables = target.StaticValiables()
         self.assertEqual(valiables, [])
-        
+    
+    def test_GlobalValiables_valid(self):
+        target = SourceCode(self.valid_ast)
+        valiables = target.GlobalValiables()
+        self.assertEqual(valiables[0].Name(), 'g_int_val1')
+        self.assertEqual(valiables[1].Name(), 'g_const_long_val2')
+        self.assertEqual(valiables[2].Name(), 'g_volatile_char_val3')
+    def test_GlobalValiables_None(self):
+        target = SourceCode(self.none_ast)
+        valiables = target.GlobalValiables()
+        self.assertEqual(valiables, [])
+    

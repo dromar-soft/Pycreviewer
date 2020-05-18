@@ -39,16 +39,25 @@ class SourceCode(object):
             if(hasattr(ext, 'type')):
                 if(isinstance(ext.type, (c_ast.ArrayDecl,c_ast.TypeDecl,c_ast.PtrDecl))):
                     if(hasattr(ext, 'storage')):
-                        if(ext.storage[0] == 'static'):
-                            valiable = Valiable(ext.name, '', ext.coord)
-                            ret.append(valiable)
+                        if(ext.storage != []):
+                            if(ext.storage[0] == 'static'):
+                                valiable = Valiable(ext.name, '', ext.coord)
+                                ret.append(valiable)
         return ret
 
-    def GlobalVariables(self)->list:
+    def GlobalValiables(self)->list:
         """
         グローバル変数の一覧を返す
         """
-        return []
+        ret = []
+        for ext in self.ast:
+            if(hasattr(ext, 'type')):
+                if(isinstance(ext.type, (c_ast.ArrayDecl,c_ast.TypeDecl,c_ast.PtrDecl))):
+                    if(hasattr(ext, 'storage')):
+                        if(ext.storage == []):
+                            valiable = Valiable(ext.name, '', ext.coord)
+                            ret.append(valiable)
+        return ret
 
     def SearchCasesOfNoBreakInSwitch(self)->list:
         """
