@@ -20,13 +20,22 @@ void g_function_def1(char flag){
         case 0:
             break;
         case 1:
-            break;
+            //No Break
         default:
             g_function_def1();
             break;
     }
     return g_function_def1();
 }
-static int m_function_def2(char c){
+static int m_function_def2(char flag2){
+    while(true){
+        switch(flag2){
+            case 0:
+                break;
+            case 1:
+                break;
+            //No Default
+        }
+    }
     return 0;
 }

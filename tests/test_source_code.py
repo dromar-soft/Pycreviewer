@@ -62,8 +62,25 @@ class TestSourceCode(unittest.TestCase):
         self.assertEqual(funccall[4].Name(), 'g_function_def1')
         self.assertEqual(funccall[5].Name(), 'g_function_def1')
         self.assertEqual(len(funccall), 6)
-    
     def test_SearchReculsiveFunctionCall_None(self):
         target = SourceCode(self.none_ast)
         steps = target.SearchReculsiveFunctionCall()
         self.assertEqual(steps, [])
+
+    def test_SearchNoBreakInCase_valid(self):
+        target = SourceCode(self.valid_ast)
+        cases = target.SearchNoBreakInCase()
+        self.assertEqual(len(cases), 1)
+    def test_SearchNoBreakInCase_none(self):
+        target = SourceCode(self.none_ast)
+        cases = target.SearchNoBreakInCase()
+        self.assertEqual(cases, [])
+
+    def test_SearchNoDefaultInSwitch_valid(self):
+        target = SourceCode(self.valid_ast)
+        cases = target.SearchNoDefaultInSwitch()
+        self.assertEqual(len(cases), 1)
+    def test_SearchNoDefaultInSwitch_none(self):
+        target = SourceCode(self.none_ast)
+        cases = target.SearchNoDefaultInSwitch()
+        self.assertEqual(cases, [])
