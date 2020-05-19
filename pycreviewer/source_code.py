@@ -12,18 +12,6 @@ class SourceCode(object):
         print("SourceCode Obj Created.")
         self.ast = ast
 
-    def __Switches__(self)->list:
-        """
-        Switch構文の一覧を返す
-        """
-        return []
-
-    def __Cases__(self)->list:
-        """
-        Switch構文に対するCase文(defaultを含む)の一覧を返す
-        """
-        return []
-
     def DefinedFunctions(self)->list:
         """
         定義された関数の一覧を返す
@@ -108,13 +96,6 @@ class SourceCode(object):
                         funccall = FunctionCall(funcname, node.name.coord)
                         ret.append(funccall)
         return ret
-class Coord(object):
-    """
-    Coordクラスは、ソースコードの座標情報を抽象化したデータクラス
-    """
-    def __init__(self, line, col):
-        self.line = line
-        self.col = col
 
 class DefinedFunction(object):
     """
@@ -248,34 +229,5 @@ class DefaultVisitor(c_ast.NodeVisitor):
     
     def visitedList(self):
         return self.visited
-
-    # def print_ext_class_name(filename):
-    #     ast = parse_file(filename, use_cpp=True,
-    #         cpp_path='gcc',
-    #         cpp_args=['-E', r'-Iutils/fake_libc_include'])
-    #     for ext in ast:
-    #         if(hasattr(ext, 'type')):
-    #             print(ext.type.__class__.__name__)
-    #         else:
-    #             print(ext.__class__.__name__)
-
-    # def print_func_def_names(filename):
-    #     ast = parse_file(filename, use_cpp=True,
-    #         cpp_path='gcc',
-    #         cpp_args=['-E', r'-Iutils/fake_libc_include'])
-    #     for ext in ast:
-    #         if(isinstance(ext, c_ast.FuncDef)):
-    #             print(ext.decl.name)
-
-    # def print_static_valiable_names(filename):
-    #     ast = parse_file(filename, use_cpp=True,
-    #         cpp_path='gcc',
-    #         cpp_args=['-E', r'-Iutils/fake_libc_include'])
-    #     for ext in ast:
-    #         if(hasattr(ext, 'type')):
-    #             if(isinstance(ext.type, (c_ast.ArrayDecl,c_ast.TypeDecl,c_ast.PtrDecl))):
-    #                 if(hasattr(ext, 'storage')):
-    #                     if(ext.storage[0] == 'static'):
-    #                         print("Static valiable: " + ext.name)
 
 
