@@ -2,22 +2,27 @@
     "version": "0.1.0",
     "conditions":{
         "static_variable_prefix":{
+            "id":"R001",
             "param":"m_",
             "level":"SHOULD"
         },
         "global_variable_prefix":{
+            "id":"R002",
             "param":"g_",
             "level":"SHOULD"
         },
         "variable_length_min":{
+            "id":"R003",
             "param":2,
             "level":"MUST"
         },
         "reculsive_call":{
+            "id":"R004",
             "param":true,
             "level":"MUST"
         },
         "function_black_list":{
+            "id":"R005",
             "param":[
                 "malloc",
                 "free"
@@ -25,10 +30,12 @@
             "level":"WANT"
         },
         "no_break_in_switch":{
+            "id":"R006",
             "param":true,
             "level":"SHOULD"
         },
         "no_default_in_switch":{
+            "id":"R007",
             "param":true,
             "level":"SHOULD"
         }

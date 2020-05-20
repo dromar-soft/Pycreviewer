@@ -4,7 +4,8 @@ class Condition(object):
     """
     Conditionクラスは、単一のチェック条件に関するデータクラスである
     """
-    def __init__(self,param,level):
+    def __init__(self,_id,param,level):
+        self.id = _id
         self.param = param
         self.level = level
 
@@ -24,8 +25,8 @@ class CheckConditions():
     def __condition_in_conditions__(self, key:str)->Condition:
         if key in self.__conditionsKey__():
             condition_dict = self.__conditionsKey__()[key]
-            if 'param' in condition_dict and 'level' in condition_dict :
-                return Condition(condition_dict['param'], condition_dict['level'])
+            if 'param' in condition_dict and 'level' in condition_dict and 'id' in condition_dict :
+                return Condition(condition_dict['id'], condition_dict['param'], condition_dict['level'])
             else :
                 return None
         else:
