@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from .check_conditions import CheckConditions
 from .source_code import SourceCode 
 
@@ -10,6 +11,7 @@ class CheckResult(object):
         self.level = level
         self.msg = msg
         self.coord = coord
+        print(vars(self))
 
     def output_str(self):
         return vars(self)
@@ -24,7 +26,20 @@ class CodinfgRules(object):
         self.code = code
         self.condtions = condtions
 
-    def check(self):
+    def check_all(self):
         results = []
         results.append(CheckResult("dummy", "WARN", "testtest", "./examples/c_files/xxxx.c::7::12"))
         return results
+
+    def check_static_variable_prefix(self)->list:
+        check_results = []
+        condition = self.condtions.StaticVariablePrefix()
+        if(not condition):
+            return check_results
+        variables = self.code.StaticValiables()
+        prefix = condition.param
+        for variable in variables:
+            if(not variable.Name().startswith(prefix)):
+                check_result = CheckResult(condition.id, condition.level, variable.Name()+' does not have the prefix '+ prefix, variable.coord) 
+                check_results.append(check_result)
+        return check_results
