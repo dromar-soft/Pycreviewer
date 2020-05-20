@@ -1,15 +1,36 @@
 {
     "version": "0.1.0",
     "conditions":{
-        "static_variable_prefix":"m_",
-        "global_variable_prefix":"g_",
-        "variable_length_min":2,
-        "reculsive_call":true,
-        "function_black_list":[
-            "malloc",
-            "free"
-        ],
-        "no_break_in_switch": true,
-        "no_default_in_switch":true
+        "static_variable_prefix":{
+            "param":"m_",
+            "level":"SHOULD"
+        },
+        "global_variable_prefix":{
+            "param":"g_",
+            "level":"SHOULD"
+        },
+        "variable_length_min":{
+            "param":2,
+            "level":"MUST"
+        },
+        "reculsive_call":{
+            "param":true,
+            "level":"MUST"
+        },
+        "function_black_list":{
+            "param":[
+                "malloc",
+                "free"
+            ],
+            "level":"WANT"
+        },
+        "no_break_in_switch":{
+            "param":true,
+            "level":"SHOULD"
+        },
+        "no_default_in_switch":{
+            "param":true,
+            "level":"SHOULD"
+        }
     }
 }

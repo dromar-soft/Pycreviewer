@@ -1,5 +1,13 @@
 import json
 
+class Condition(object):
+    """
+    Conditionクラスは、単一のチェック条件に関するデータクラスである
+    """
+    def __init__(self,param,level):
+        self.param = param
+        self.level = level
+
 class CheckConditions():
     """
     CheckConditions class provide functions to decode JSON file 
@@ -13,30 +21,15 @@ class CheckConditions():
     def __init__(self, file_path:str):
         self.__load__(file_path)
 
-    def __StrValueInCondtions__(self, key:str)->str:
+    def __condition_in_conditions__(self, key:str)->Condition:
         if key in self.__conditionsKey__():
-            return self.__conditionsKey__()[key]
+            condition_dict = self.__conditionsKey__()[key]
+            if 'param' in condition_dict and 'level' in condition_dict :
+                return Condition(condition_dict['param'], condition_dict['level'])
+            else :
+                return None
         else:
-            return ''
-
-    def __IntValueInCondtions__(self, key:str)->int:
-        if key in self.__conditionsKey__():
-            return self.__conditionsKey__()[key]
-        else:
-            return 0
-
-    def __ListValueInCondtions__(self, key:str)->list:
-        if key in self.__conditionsKey__():
-            return self.__conditionsKey__()[key]
-        else:
-            return []
-    
-    def __BoolValueInCondtions__(self, key:str)->bool:
-        if key in self.__conditionsKey__():
-            return self.__conditionsKey__()[key]
-        else:
-            return False
-
+            return None
 
     def __conditionsKey__(self):
         if 'conditions' in self.json_dict:
@@ -50,23 +43,23 @@ class CheckConditions():
         else:
             return ''
 
-    def StaticVariablePrefix(self)->str:
-        return self.__StrValueInCondtions__('static_variable_prefix')
+    def StaticVariablePrefix(self)->Condition:
+        return self.__condition_in_conditions__('static_variable_prefix')
 
-    def GlobalVariablePrefix(self)->str:
-        return self.__StrValueInCondtions__('global_variable_prefix')
+    def GlobalVariablePrefix(self)->Condition:
+        return self.__condition_in_conditions__('global_variable_prefix')
 
-    def VariableLengthMin(self)->int:
-        return self.__IntValueInCondtions__('variable_length_min')
+    def VariableLengthMin(self)->Condition:
+        return self.__condition_in_conditions__('variable_length_min')
     
-    def FunctionBlackList(self)->list:
-        return self.__ListValueInCondtions__('function_black_list')
+    def FunctionBlackList(self)->Condition:
+        return self.__condition_in_conditions__('function_black_list')
     
-    def NoBreakInSwitch(self)->bool:
-        return self.__BoolValueInCondtions__('no_break_in_switch')
+    def NoBreakInSwitch(self)->Condition:
+        return self.__condition_in_conditions__('no_break_in_switch')
 
-    def NoDefaultInSwitch(self)->bool:
-        return self.__BoolValueInCondtions__('no_default_in_switch')
+    def NoDefaultInSwitch(self)->Condition:
+        return self.__condition_in_conditions__('no_default_in_switch')
 
-    def ReculsiveCall(self)->bool:
-        return self.__BoolValueInCondtions__('reculsive_call')
+    def ReculsiveCall(self)->Condition:
+        return self.__condition_in_conditions__('reculsive_call')

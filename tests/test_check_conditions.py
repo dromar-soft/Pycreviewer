@@ -16,73 +16,80 @@ class TestCheckConditions(unittest.TestCase):
 
     def test_StaticVariablePrefix_valid(self):
         obj = check_conditions.CheckConditions("./test_data/default.json")
-        self.assertEqual(obj.StaticVariablePrefix(), 'm_')
+        self.assertEqual(obj.StaticVariablePrefix().param, 'm_')
+        self.assertEqual(obj.StaticVariablePrefix().level, 'SHOULD')
     def test_StaticVariablePrefix_NoAllKey(self):
         obj = check_conditions.CheckConditions("./test_data/no_all_key.json")
-        self.assertEqual(obj.StaticVariablePrefix(), '')
+        self.assertEqual(obj.StaticVariablePrefix(), None)
     def test_StaticVariablePrefix_NoConditionKey(self):
         obj = check_conditions.CheckConditions("./test_data/no_conditions_key.json")
-        self.assertEqual(obj.StaticVariablePrefix(), '')
+        self.assertEqual(obj.StaticVariablePrefix(), None)
 
     def test_GlobalVariablePrefix_valid(self):
         obj = check_conditions.CheckConditions("./test_data/default.json")
-        self.assertEqual(obj.GlobalVariablePrefix(), 'g_')
+        self.assertEqual(obj.GlobalVariablePrefix().param, 'g_')
+        self.assertEqual(obj.StaticVariablePrefix().level, 'SHOULD')
     def test_GlobalVariablePrefix_NoAllKey(self):
         obj = check_conditions.CheckConditions("./test_data/no_all_key.json")
-        self.assertEqual(obj.GlobalVariablePrefix(), '')
+        self.assertEqual(obj.GlobalVariablePrefix(), None)
     def test_GlobalVariablePrefix_NoConditionKey(self):
         obj = check_conditions.CheckConditions("./test_data/no_conditions_key.json")
-        self.assertEqual(obj.GlobalVariablePrefix(), '')
+        self.assertEqual(obj.GlobalVariablePrefix(), None)
 
     def test_VarialeLengthMin_valid(self):
         obj = check_conditions.CheckConditions("./test_data/default.json")
-        self.assertEqual(obj.VariableLengthMin(), 2)
+        self.assertEqual(obj.VariableLengthMin().param, 2)
+        self.assertEqual(obj.VariableLengthMin().level, 'MUST')
     def test_VarialeLengthMin_NoAllKey(self):
         obj = check_conditions.CheckConditions("./test_data/no_all_key.json")
-        self.assertEqual(obj.VariableLengthMin(), 0)
+        self.assertEqual(obj.VariableLengthMin(), None)
     def test_VarialeLengthMin_NoConditionKey(self):
         obj = check_conditions.CheckConditions("./test_data/no_conditions_key.json")
-        self.assertEqual(obj.VariableLengthMin(), 0)
+        self.assertEqual(obj.VariableLengthMin(), None)
+
+    def test_ReculsiveCall_valid(self):
+        obj = check_conditions.CheckConditions("./test_data/default.json")
+        self.assertEqual(obj.ReculsiveCall().param, True)
+        self.assertEqual(obj.ReculsiveCall().level, 'MUST')
+    def test_ReculsiveCall_NoAllKey(self):
+        obj = check_conditions.CheckConditions("./test_data/no_all_key.json")
+        self.assertEqual(obj.ReculsiveCall(), None)
+    def test_ReculsiveCall_NoConditionKey(self):
+        obj = check_conditions.CheckConditions("./test_data/no_conditions_key.json")
+        self.assertEqual(obj.ReculsiveCall(), None)
 
     def test_FunctionBlackList_vaild(self):
         obj = check_conditions.CheckConditions("./test_data/default.json")
-        self.assertEqual(obj.FunctionBlackList(),["malloc","free"])
+        self.assertEqual(obj.FunctionBlackList().param,["malloc","free"])
+        self.assertEqual(obj.FunctionBlackList().level,'WANT')
     def test_FunctionBlackList_NoAllKey(self):
         obj = check_conditions.CheckConditions("./test_data/no_all_key.json")
-        self.assertEqual(obj.FunctionBlackList(),[])
+        self.assertEqual(obj.FunctionBlackList(),None)
     def test_FunctionBlackList_NoConditionKey(self):
         obj = check_conditions.CheckConditions("./test_data/no_conditions_key.json")
-        self.assertEqual(obj.FunctionBlackList(),[])
+        self.assertEqual(obj.FunctionBlackList(),None)
 
     def test_NoBreakInSwitch_valid(self):
         obj = check_conditions.CheckConditions("./test_data/default.json")
-        self.assertEqual(obj.NoBreakInSwitch(), True)
+        self.assertEqual(obj.NoBreakInSwitch().param, True)
+        self.assertEqual(obj.NoBreakInSwitch().level,'SHOULD')
     def test_NoBreakInSwitch_NoAllKey(self):
         obj = check_conditions.CheckConditions("./test_data/no_all_key.json")
-        self.assertEqual(obj.NoBreakInSwitch(), False)
+        self.assertEqual(obj.NoBreakInSwitch(), None)
     def test_NoBreakInSwitch_NoConditionKey(self):
         obj = check_conditions.CheckConditions("./test_data/no_conditions_key.json")
-        self.assertEqual(obj.NoBreakInSwitch(), False)
+        self.assertEqual(obj.NoBreakInSwitch(), None)
     
     def test_NoDefaultInSwitch_valid(self):
         obj = check_conditions.CheckConditions("./test_data/default.json")
-        self.assertEqual(obj.NoDefaultInSwitch(), True)
+        self.assertEqual(obj.NoDefaultInSwitch().param, True)
+        self.assertEqual(obj.NoDefaultInSwitch().level, 'SHOULD')
     def test_NoDefaultInSwitch_NoAllKey(self):
         obj = check_conditions.CheckConditions("./test_data/no_all_key.json")
-        self.assertEqual(obj.NoDefaultInSwitch(), False)
+        self.assertEqual(obj.NoDefaultInSwitch(), None)
     def test_NoDefaultInSwitch_NoConditionKey(self):
         obj = check_conditions.CheckConditions("./test_data/no_conditions_key.json")
-        self.assertEqual(obj.NoDefaultInSwitch(), False)
-    
-    def test_ReculsiveCall_valid(self):
-        obj = check_conditions.CheckConditions("./test_data/default.json")
-        self.assertEqual(obj.ReculsiveCall(), True)
-    def test_ReculsiveCall_NoAllKey(self):
-        obj = check_conditions.CheckConditions("./test_data/no_all_key.json")
-        self.assertEqual(obj.ReculsiveCall(), False)
-    def test_ReculsiveCall_NoConditionKey(self):
-        obj = check_conditions.CheckConditions("./test_data/no_conditions_key.json")
-        self.assertEqual(obj.ReculsiveCall(), False)
+        self.assertEqual(obj.NoDefaultInSwitch(), None)
     
 
 if __name__ == '__main__':
