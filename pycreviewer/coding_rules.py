@@ -19,8 +19,8 @@ class CheckResult(object):
 class CodinfgRules(object):
     """
     CodingRulesクラスはコーディングルールを抽象化し、コードが各ルールに逸脱していないかをチェックする機能を持つ。
-    チェック対象となるコード情報は、AstAnaysisオブジェクトを参照し取得する。
-    各種ルールに対する詳細なチェック条件を取得するために、CodgingRulesクラスは、CheckConditionクラスを参照する。
+    チェック対象となるコード情報は、SourceCodeオブジェクトを参照し取得する。
+    各種ルールに対する詳細なチェック条件を取得するために、CodgingRulesクラスは、CheckConditionオブジェクトを参照する。
     """
     def __init__(self, code:SourceCode, condtions:CheckConditions):
         self.code = code
@@ -32,6 +32,9 @@ class CodinfgRules(object):
         return results
 
     def check_static_variable_prefix(self)->list:
+        """
+        静的変数の接頭辞を確認する
+        """
         check_results = []
         condition = self.condtions.StaticVariablePrefix()
         if(not condition):
@@ -43,3 +46,19 @@ class CodinfgRules(object):
                 check_result = CheckResult(condition.id, condition.level, variable.Name()+' does not have the prefix '+ prefix, variable.coord) 
                 check_results.append(check_result)
         return check_results
+    
+    def check_global_variable_prefix(self)->list:
+        """
+        グローバル変数の接頭辞を確認する
+        """
+        check_results = []
+        condition = self.condtions.GlobalVariablePrefix()
+        if(not condition):
+            return check_results
+        variables = self.code.GlobalValiables()
+        prefix = condition.param
+        for variable in variables:
+            if(not variable.Name().startswith(prefix)):
+                check_result = CheckResult(condition.id, condition.level, variable.Name()+' does not have the prefix '+ prefix, variable.coord) 
+                check_results.append(check_result)
+        return check_results   

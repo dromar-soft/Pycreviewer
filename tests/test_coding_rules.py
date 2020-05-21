@@ -36,8 +36,21 @@ class TestCodingRules(unittest.TestCase):
         self.assertTrue(expect_msg_part in check_result.msg)
         self.assertEqual(check_result.id, expect_id)
         self.assertEqual(check_result.level, expect_level)
-
     def test_check_static_variable_prefix_none(self):
         check_results = self.rules_none.check_static_variable_prefix() 
         self.assertEqual(len(check_results), 0)        
+    
+    def test_check_global_variale_prefix_valid(self):
+        expect_id = 'R002'
+        expect_level = 'SHOULD'
+        expect_msg_part = 'does not have the prefix'
+        check_results = self.rules_valid.check_global_variable_prefix() 
+        self.assertEqual(len(check_results), 1)
+        check_result = check_results[0]
+        self.assertTrue(expect_msg_part in check_result.msg)
+        self.assertEqual(check_result.id, expect_id)
+        self.assertEqual(check_result.level, expect_level) 
+    def test_check_global_variable_prefix_none(self):
+        check_results = self.rules_none.check_global_variable_prefix() 
+        self.assertEqual(len(check_results), 0)
         
