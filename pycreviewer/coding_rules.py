@@ -43,7 +43,7 @@ class CodinfgRules(object):
         prefix = condition.param
         for variable in variables:
             if(not variable.Name().startswith(prefix)):
-                check_result = CheckResult(condition.id, condition.level, variable.Name()+' does not have the prefix '+ prefix, variable.coord) 
+                check_result = CheckResult(condition.id, condition.level, variable.Name()+' does not have the prefix '+prefix+'.', variable.coord) 
                 check_results.append(check_result)
         return check_results
     
@@ -59,6 +59,22 @@ class CodinfgRules(object):
         prefix = condition.param
         for variable in variables:
             if(not variable.Name().startswith(prefix)):
-                check_result = CheckResult(condition.id, condition.level, variable.Name()+' does not have the prefix '+ prefix, variable.coord) 
+                check_result = CheckResult(condition.id, condition.level, variable.Name()+' does not have the prefix '+prefix+'.', variable.coord) 
                 check_results.append(check_result)
-        return check_results   
+        return check_results
+
+    def check_function_blacklist(self)->list:
+        """
+        使用禁止の関数が利用されているか確認する
+        """
+        check_results = []
+        condition = self.condtions.FunctionBlackList()
+        if(not condition):
+            return check_results
+        for funcname in condition.param:
+            funccalls = self.code.SearchFunctionCalls(funcname)
+            if(len(funccalls) > 0):
+                for funccall in funccalls:
+                    check_result = CheckResult(condition.id, condition.level, funcname+' a is one of function blacklist.', funccall.coord) 
+                    check_results.append(check_result)
+        return check_results

@@ -53,4 +53,19 @@ class TestCodingRules(unittest.TestCase):
     def test_check_global_variable_prefix_none(self):
         check_results = self.rules_none.check_global_variable_prefix() 
         self.assertEqual(len(check_results), 0)
+
+    def test_check_function_blacklist_valid(self):
+        expect_id = 'R005'
+        expect_level = 'WANT'
+        expect_msg = 'malloc a is one of function blacklist.'
+        check_results = self.rules_valid.check_function_blacklist() 
+        self.assertEqual(len(check_results), 2)
+        check_result = check_results[0]
+        self.assertTrue(expect_msg in check_result.msg)
+        self.assertEqual(check_result.id, expect_id)
+        self.assertEqual(check_result.level, expect_level) 
+    def test_check_function_blacklist_none(self):
+        check_results = self.rules_none.check_function_blacklist() 
+        self.assertEqual(len(check_results), 0)
         
+            
