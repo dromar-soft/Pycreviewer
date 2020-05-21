@@ -23,6 +23,21 @@ class SourceCode(object):
                 ret.append(function)
         return ret
 
+    def SearchFunctionCalls(self, target_funcname:str)->list:
+        """
+        特定の関数がコールされているか検索し、検索結果をFunctionCallオブジェクトのリスト形式で取得する
+        検索のアルゴリズムはは関数名の文字列比較であり、引数や戻り値は考慮しない
+        """
+        ret = []
+        for ext in self.ast:
+            if(isinstance(ext, c_ast.FuncDef)):
+                    v = FuncCallVisitor(target_funcname)
+                    v.visit(ext)
+                    for node in v.visitedList():
+                        funccall = FunctionCall(target_funcname, node.name.coord)
+                        ret.append(funccall)
+        return ret
+
     def StaticValiables(self)->list:
         """
         静的変数の一覧を返す
@@ -91,7 +106,7 @@ class SourceCode(object):
             if(isinstance(ext, c_ast.FuncDef)):
                     funcname = ext.decl.name
                     v = FuncCallVisitor(funcname)
-                    v.visit(self.ast)
+                    v.visit(ext)
                     for node in v.visitedList():
                         funccall = FunctionCall(funcname, node.name.coord)
                         ret.append(funccall)

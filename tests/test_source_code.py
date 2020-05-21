@@ -55,6 +55,17 @@ class TestSourceCode(unittest.TestCase):
         functions = target.DefinedFunctions()
         self.assertEqual(functions, [])
 
+    def test_SearchFunctionCalls_valid(self):
+        target = SourceCode(self.valid_ast)
+        funccalls = target.SearchFunctionCalls('free')
+        self.assertEqual(len(funccalls), 1)
+        funccalls = target.SearchFunctionCalls('freeeee')
+        self.assertEqual(len(funccalls), 0)
+    def test_SearchFunctionCalls_none(self):
+        target = SourceCode(self.none_ast)
+        funccalls = target.SearchFunctionCalls('free')
+        self.assertEqual(len(funccalls), 0)
+
     def test_SearchReculsiveFunctionCall_valid(self):
         target = SourceCode(self.valid_ast)
         funccalls = target.SearchReculsiveFunctionCall()

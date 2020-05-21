@@ -6,6 +6,7 @@ static volatile char volatile_char_val3;    //static_variable_prefix NG
 volatile char l_volatile_char_val3;         //global_variable_prefix NG
 static int m_function_def2(char);
 void g_function_def1(char flag){
+    malloc();
     g_function_def1();
     if(flag){
         g_function_def1();
@@ -25,6 +26,7 @@ void g_function_def1(char flag){
             g_function_def1();
             break;
     }
+    free();
     return g_function_def1();
 }
 static int m_function_def2(char flag2){
@@ -37,5 +39,6 @@ static int m_function_def2(char flag2){
             //No Default
         }
     }
+    g_function_def1();
     return 0;
 }
