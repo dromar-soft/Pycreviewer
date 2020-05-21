@@ -10,17 +10,23 @@ class TestSourceCode(unittest.TestCase):
                 期待する箇所で検索できていること->件数で判断->len(戻り値)
                 検索値が正しいこと->代表例１件で判定
                 coordについてはテストデータの管理が難しいため、ここではチェックしない。専用のテストケースを用意する
+            variables()のテストについて:
+                他のテストデータ(Cソースファイル)との両立が難しいため、
+                専用のテストデータを使ってテストする。(variable.c)
     """
 
     def setUp(self):
 
         self.cpp_args = ['-E', r'-Ipycreviewer/utils/fake_libc_include']
 
-        self.valid_source = "./test_data/c_files/valid.c"
-        self.valid_ast = parse(self.valid_source,self.cpp_args)
+        valid_source = "./test_data/c_files/valid.c"
+        self.valid_ast = parse(valid_source,self.cpp_args)
 
-        self.none_source = "./test_data/c_files/none.c"
-        self.none_ast = parse(self.none_source,self.cpp_args)
+        variables_source = "./test_data/c_files/variables.c"
+        self.variables_ast = parse(variables_source,self.cpp_args)
+
+        none_source = "./test_data/c_files/none.c"
+        self.none_ast = parse(none_source,self.cpp_args)
 
     def test_StaticValiables_valid(self):
         target = SourceCode(self.valid_ast)
@@ -43,6 +49,15 @@ class TestSourceCode(unittest.TestCase):
         target = SourceCode(self.none_ast)
         valiables = target.GlobalValiables()
         self.assertEqual(valiables, [])
+
+    def test_Variables_variables(self):
+        target = SourceCode(self.variables_ast)
+        variables = target.Varialbles()
+        self.assertEqual(len(variables), 11)
+    def test_Variables_none(self):
+        target = SourceCode(self.none_ast)
+        variables = target.Varialbles()
+        self.assertEqual(len(variables), 0)
 
     def test_DefinedFunctions_valid(self):
         target = SourceCode(self.valid_ast)

@@ -67,6 +67,39 @@ class SourceCode(object):
                             ret.append(valiable)
         return ret
 
+    def __LocalVariables__(self)->list:
+        """
+        ローカル変数(関数引数と関数定義内で宣言された変数）の一覧を返す
+        """
+        ret = []
+        for ext in self.ast:
+            if(isinstance(ext, c_ast.FuncDef)):
+                visitor = VariableDeclVisitor()
+                visitor.visit(ext.decl.type.args)   #関数引数を探索
+                visitor.visit(ext.body)             #関数定義内を探索
+                for node in visitor.visitedList():
+                    """
+                    引数なし関数の場合、
+                    xxxx(void)のvoidがTypedecl(.declname=None,.coord=None)として探索されてしまうので、チェックではじく
+                    """
+                    if( node.declname and node.coord ):
+                        variable = Valiable(node.declname, '', node.coord)
+                        ret.append(variable)
+        return ret
+
+    def Varialbles(self)->list:
+        """
+        変数宣言の一覧を返す
+        """
+        ret = []
+        global_vars = self.GlobalValiables()  
+        static_vars = self.StaticValiables()
+        local_vars = self.__LocalVariables__()
+        ret.extend(global_vars)
+        ret.extend(static_vars)
+        ret.extend(local_vars)
+        return ret
+
     def SearchNoBreakInCase(self)->list:
         """
         Case文にbreakがない箇所を検索する
@@ -169,6 +202,26 @@ class Valiable(object):
     def Coord(self):
         return self.coord
 
+class VariableDeclVisitor(c_ast.NodeVisitor):
+    """
+    VariableDeclクラスはc_astモジュールのNodeVisitorクラスを継承し、
+    ArrayDecl,TypeDecl,PtrDeclノード(つまり変数宣言にまつわるノード)を再起的に検索する機能を提供する。
+    """
+    def __init__(self):
+        self.visited = []
+
+    def visit_ArrayDecl(self, node):
+        self.visited.append(node)
+
+    def visit_TypeDecl(self, node):
+        self.visited.append(node)
+
+    # def visit_PtrDecl(self, node):
+    #     self.visited.append(node)
+
+    
+    def visitedList(self):
+        return self.visited
 
 class FuncCallVisitor(c_ast.NodeVisitor):
     """
