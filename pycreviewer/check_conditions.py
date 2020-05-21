@@ -54,7 +54,7 @@ class CheckConditions():
         return self.__condition_in_conditions__('variable_length_min')
     
     def FunctionBlackList(self)->Condition:
-        return self.__condition_in_conditions__('function_black_list')
+        return self.__condition_in_conditions__('function_blacklist')
     
     def NoBreakInSwitch(self)->Condition:
         return self.__condition_in_conditions__('no_break_in_switch')

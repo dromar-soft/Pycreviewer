@@ -21,7 +21,7 @@
             "param":true,
             "level":"MUST"
         },
-        "function_black_list":{
+        "function_blacklist":{
             "id":"R005",
             "param":[
                 "malloc",
