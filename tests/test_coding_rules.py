@@ -95,5 +95,19 @@ class TestCodingRules(unittest.TestCase):
     def test_check_function_blacklist_none(self):
         check_results = self.rules_none.check_function_blacklist() 
         self.assertEqual(len(check_results), 0)
+
+    def test_check_no_break_in_switch_valid(self):
+        expect_id = 'R006'
+        expect_level = 'SHOULD'
+        expect_msg_part = 'No break statement in switch-case statement.' 
+        check_results = self.rules_valid.check_no_break_in_switch()
+        self.assertEqual(len(check_results), 1)
+        check_result_example = check_results[0]
+        self.assertTrue(expect_msg_part in check_result_example.msg)
+        self.assertEqual(expect_id, check_result_example.id)
+        self.assertEqual(expect_level, check_result_example.level)
+    def test_check_no_break_in_switch_none(self):
+        check_results = self.rules_none.check_no_break_in_switch()
+        self.assertEqual(len(check_results), 0)
         
             

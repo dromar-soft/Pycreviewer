@@ -110,3 +110,19 @@ class CodinfgRules(object):
                     check_result = CheckResult(condition.id, condition.level, funcname+' a is one of function blacklist.', funccall.coord) 
                     check_results.append(check_result)
         return check_results
+    
+    def check_no_break_in_switch(self)->list:
+        """
+        Switch-Case文内にbreak文がない箇所を確認する。
+        """
+        check_results = []
+        condition = self.condtions.NoBreakInSwitch()
+        if(not condition):
+            return check_results
+        isChecked = condition.param
+        if(isChecked):
+            cases = self.code.SearchNoBreakInCase()
+            for case in cases:
+                check_result = CheckResult(condition.id, condition.level, 'No break statement in switch-case statement.', case.coord)
+                check_results.append(check_result)
+        return check_results
