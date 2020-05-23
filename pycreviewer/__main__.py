@@ -22,7 +22,7 @@ def execute_code_review(source_path: str) ->list:
     ast = parse(filepath=source_path,cpp_args=['-E', r'-Ipycreviewer/utils/fake_libc_include'])
     code = SourceCode(ast)
     rules = CodinfgRules(code, CheckConditions('./default.json'))
-    results = rules.check()
+    results = rules.check_all()
     return results
 
 def search_csource_abs_paths(source_folder: str) ->list:
