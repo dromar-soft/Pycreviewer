@@ -50,8 +50,8 @@ class CheckConditions():
     def GlobalVariablePrefix(self)->Condition:
         return self.__condition_in_conditions__('global_variable_prefix')
 
-    def VariableLengthMin(self)->Condition:
-        return self.__condition_in_conditions__('variable_length_min')
+    def VariableShortName(self)->Condition:
+        return self.__condition_in_conditions__('variable_short_name')
     
     def FunctionBlackList(self)->Condition:
         return self.__condition_in_conditions__('function_blacklist')

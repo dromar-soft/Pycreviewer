@@ -63,12 +63,12 @@ class CodinfgRules(object):
                 check_results.append(check_result)
         return check_results
 
-    def check_variable_length_min(self)->list:
+    def check_variable_short_name(self)->list:
         """
         名前が短い変数を確認する
         """
         check_results = []
-        condition = self.condtions.VariableLengthMin()
+        condition = self.condtions.VariableShortName()
         if(not condition):
             return check_results
         length_min = condition.param

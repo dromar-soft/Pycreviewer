@@ -11,7 +11,7 @@
             "param":"g_",
             "level":"SHOULD"
         },
-        "variable_length_min":{
+        "variable_name_short":{
             "id":"R003",
             "param":2,
             "level":"MUST"

@@ -38,17 +38,17 @@ class TestCheckConditions(unittest.TestCase):
         obj = check_conditions.CheckConditions("./test_data/no_conditions_key.json")
         self.assertEqual(obj.GlobalVariablePrefix(), None)
 
-    def test_VarialeLengthMin_valid(self):
+    def test_VariableShortName_valid(self):
         obj = check_conditions.CheckConditions("./test_data/default.json")
-        self.assertEqual(obj.VariableLengthMin().id, 'R003')
-        self.assertEqual(obj.VariableLengthMin().param, 2)
-        self.assertEqual(obj.VariableLengthMin().level, 'MUST')
-    def test_VarialeLengthMin_NoAllKey(self):
+        self.assertEqual(obj.VariableShortName().id, 'R003')
+        self.assertEqual(obj.VariableShortName().param, 2)
+        self.assertEqual(obj.VariableShortName().level, 'MUST')
+    def test_VariableShortName_NoAllKey(self):
         obj = check_conditions.CheckConditions("./test_data/no_all_key.json")
-        self.assertEqual(obj.VariableLengthMin(), None)
-    def test_VarialeLengthMin_NoConditionKey(self):
+        self.assertEqual(obj.VariableShortName(), None)
+    def test_VariableShortName_NoConditionKey(self):
         obj = check_conditions.CheckConditions("./test_data/no_conditions_key.json")
-        self.assertEqual(obj.VariableLengthMin(), None)
+        self.assertEqual(obj.VariableShortName(), None)
 
     def test_ReculsiveCall_valid(self):
         obj = check_conditions.CheckConditions("./test_data/default.json")
