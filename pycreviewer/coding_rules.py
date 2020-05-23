@@ -63,6 +63,22 @@ class CodinfgRules(object):
                 check_results.append(check_result)
         return check_results
 
+    def check_variable_length_min(self)->list:
+        """
+        名前が短い変数を確認する
+        """
+        check_results = []
+        condition = self.condtions.VariableLengthMin()
+        if(not condition):
+            return check_results
+        length_min = condition.param
+        variables = self.code.Varialbles()
+        for variable in variables:
+            if(len(variable.Name()) <= length_min):
+                check_result = CheckResult(condition.id, condition.level, variable.Name()+' is too short a variable name.', variable.coord)
+                check_results.append(check_result)
+        return check_results
+
     def check_function_blacklist(self)->list:
         """
         使用禁止の関数が利用されているか確認する

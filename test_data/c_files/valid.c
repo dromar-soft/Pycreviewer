@@ -1,12 +1,12 @@
 static int m_int_val1;
 int g_int_val1;
-static const long m_const_long_val2;
-const long g_const_long_val2;
+static const long m_;                       //variable_length_min NG
+const long g_;                              //variable_length_min NG
 static volatile char volatile_char_val3;    //static_variable_prefix NG
 volatile char l_volatile_char_val3;         //global_variable_prefix NG
 static int m_function_def2(char);
 void g_function_def1(char flag){
-    malloc();
+    malloc(); //function_blacklist NG
     g_function_def1();
     if(flag){
         g_function_def1();
@@ -14,7 +14,7 @@ void g_function_def1(char flag){
     while(true){
         g_function_def1();
     }
-    for(int i = 0; i< 10; i++){
+    for(int i = 0; i< 10; i++){            //variable_length_min NG
         g_function_def1();
     }
     switch(flag){
@@ -26,12 +26,12 @@ void g_function_def1(char flag){
             g_function_def1();
             break;
     }
-    free();
+    free(); //function_blacklist NG
     return g_function_def1();
 }
-static int m_function_def2(char flag2){
+static int m_function_def2(char f){         //variable_length_min NG
     while(true){
-        switch(flag2){
+        switch(f){
             case 0:
                 break;
             case 1:

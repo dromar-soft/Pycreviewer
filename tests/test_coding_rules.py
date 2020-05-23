@@ -54,6 +54,20 @@ class TestCodingRules(unittest.TestCase):
         check_results = self.rules_none.check_global_variable_prefix() 
         self.assertEqual(len(check_results), 0)
 
+    def test_check_variable_length_min_valid(self):
+        expect_id = 'R003'
+        expect_level = 'MUST'
+        expect_msg_part = 'is too short a variable name.'
+        check_results = self.rules_valid.check_variable_length_min()
+        self.assertEqual(len(check_results), 4)
+        check_result_example = check_results[0]
+        self.assertTrue(expect_msg_part in check_result_example.msg)
+        self.assertEqual(check_result_example.id, expect_id)
+        self.assertEqual(check_result_example.level, expect_level)    
+    def test_check_variable_length_min_none(self):
+        check_results = self.rules_none.check_variable_length_min()
+        self.assertEqual(len(check_results), 0)
+
     def test_check_function_blacklist_valid(self):
         expect_id = 'R005'
         expect_level = 'WANT'
