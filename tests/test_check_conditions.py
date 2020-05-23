@@ -50,17 +50,17 @@ class TestCheckConditions(unittest.TestCase):
         obj = check_conditions.CheckConditions("./test_data/no_conditions_key.json")
         self.assertEqual(obj.VariableShortName(), None)
 
-    def test_ReculsiveCall_valid(self):
+    def test_RecursiveCall_valid(self):
         obj = check_conditions.CheckConditions("./test_data/default.json")
-        self.assertEqual(obj.ReculsiveCall().id, 'R004')
-        self.assertEqual(obj.ReculsiveCall().param, True)
-        self.assertEqual(obj.ReculsiveCall().level, 'MUST')
-    def test_ReculsiveCall_NoAllKey(self):
+        self.assertEqual(obj.RecursiveCall().id, 'R004')
+        self.assertEqual(obj.RecursiveCall().param, True)
+        self.assertEqual(obj.RecursiveCall().level, 'MUST')
+    def test_RecursiveCall_NoAllKey(self):
         obj = check_conditions.CheckConditions("./test_data/no_all_key.json")
-        self.assertEqual(obj.ReculsiveCall(), None)
-    def test_ReculsiveCall_NoConditionKey(self):
+        self.assertEqual(obj.RecursiveCall(), None)
+    def test_RecursiveCall_NoConditionKey(self):
         obj = check_conditions.CheckConditions("./test_data/no_conditions_key.json")
-        self.assertEqual(obj.ReculsiveCall(), None)
+        self.assertEqual(obj.RecursiveCall(), None)
 
     def test_FunctionBlackList_vaild(self):
         obj = check_conditions.CheckConditions("./test_data/default.json")

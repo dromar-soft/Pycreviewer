@@ -81,15 +81,15 @@ class TestSourceCode(unittest.TestCase):
         funccalls = target.SearchFunctionCalls('free')
         self.assertEqual(len(funccalls), 0)
 
-    def test_SearchReculsiveFunctionCall_valid(self):
+    def test_SearchRecursiveFunctionCall_valid(self):
         target = SourceCode(self.valid_ast)
-        funccalls = target.SearchReculsiveFunctionCall()
+        funccalls = target.SearchRecursiveFunctionCall()
         self.assertEqual(len(funccalls), 6)
         example = funccalls[0]
         self.assertEqual(example.Name(), 'g_function_def1')
-    def test_SearchReculsiveFunctionCall_None(self):
+    def test_SearchRecursiveFunctionCall_None(self):
         target = SourceCode(self.none_ast)
-        steps = target.SearchReculsiveFunctionCall()
+        steps = target.SearchRecursiveFunctionCall()
         self.assertEqual(steps, [])
 
     def test_SearchNoBreakInCase_valid(self):

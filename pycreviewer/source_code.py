@@ -130,7 +130,7 @@ class SourceCode(object):
                 ret.append(swt) 
         return ret
 
-    def SearchReculsiveFunctionCall(self)->list:
+    def SearchRecursiveFunctionCall(self)->list:
         """
         再起呼び出し関数を検索する
         """

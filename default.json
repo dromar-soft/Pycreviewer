@@ -11,12 +11,12 @@
             "param":"g_",
             "level":"SHOULD"
         },
-        "variable_name_short":{
+        "variable_short_name":{
             "id":"R003",
             "param":2,
             "level":"MUST"
         },
-        "reculsive_call":{
+        "recursive_call":{
             "id":"R004",
             "param":true,
             "level":"MUST"

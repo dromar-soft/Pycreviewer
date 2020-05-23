@@ -62,5 +62,5 @@ class CheckConditions():
     def NoDefaultInSwitch(self)->Condition:
         return self.__condition_in_conditions__('no_default_in_switch')
 
-    def ReculsiveCall(self)->Condition:
-        return self.__condition_in_conditions__('reculsive_call')
+    def RecursiveCall(self)->Condition:
+        return self.__condition_in_conditions__('recursive_call')
