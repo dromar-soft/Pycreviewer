@@ -126,3 +126,19 @@ class CodinfgRules(object):
                 check_result = CheckResult(condition.id, condition.level, 'No break statement in switch-case statement.', case.coord)
                 check_results.append(check_result)
         return check_results
+
+    def check_no_default_in_switch(self)->list:
+        """
+        Switch文中にDefault文がない箇所を確認する
+        """
+        check_results = []
+        condition = self.condtions.NoDefaultInSwitch()
+        if(not condition):
+            return check_results
+        isChecked = condition.param
+        if(isChecked):
+            switches = self.code.SearchNoDefaultInSwitch()
+            for switch in switches:
+                check_result = CheckResult(condition.id, condition.level, 'No default statement in switch-case statement.', switch.coord)
+                check_results.append(check_result)
+        return check_results
