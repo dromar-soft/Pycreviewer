@@ -75,12 +75,17 @@ class SourceCode(object):
         for ext in self.ast:
             if(isinstance(ext, c_ast.FuncDef)):
                 visitor = VariableDeclVisitor()
-                visitor.visit(ext.decl.type.args)   #関数引数を探索
+                """
+                main()のように、
+                関数引数がnullの場合、argsがNoneになるため、Noneチェックを行う
+                """
+                if(ext.decl.type.args is not None):
+                    visitor.visit(ext.decl.type.args)   #関数引数を探索
                 visitor.visit(ext.body)             #関数定義内を探索
                 for node in visitor.visitedList():
                     """
-                    引数なし関数の場合、
-                    xxxx(void)のvoidがTypedecl(.declname=None,.coord=None)として探索されてしまうので、チェックではじく
+                    main(void)のように、
+                    引数=void関数の場合、'void'がTypedecl(.declname=None,.coord=None)として探索されてしまうので、チェックではじく
                     """
                     if( node.declname and node.coord ):
                         variable = Valiable(node.declname, '', node.coord)
@@ -205,20 +210,13 @@ class Valiable(object):
 class VariableDeclVisitor(c_ast.NodeVisitor):
     """
     VariableDeclクラスはc_astモジュールのNodeVisitorクラスを継承し、
-    ArrayDecl,TypeDecl,PtrDeclノード(つまり変数宣言にまつわるノード)を再起的に検索する機能を提供する。
+    TypeDeclノード(つまり変数宣言にまつわるノード)を再起的に検索する機能を提供する。
     """
     def __init__(self):
         self.visited = []
 
-    def visit_ArrayDecl(self, node):
-        self.visited.append(node)
-
     def visit_TypeDecl(self, node):
         self.visited.append(node)
-
-    # def visit_PtrDecl(self, node):
-    #     self.visited.append(node)
-
     
     def visitedList(self):
         return self.visited
