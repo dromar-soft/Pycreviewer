@@ -27,9 +27,18 @@ class CodinfgRules(object):
         self.condtions = condtions
 
     def check_all(self):
-        results = []
-        results.append(CheckResult("dummy", "WARN", "testtest", "./examples/c_files/xxxx.c::7::12"))
-        return results
+        """
+        全コーディングルールのチェックを実行する
+        """
+        check_results = []
+        check_results.extend(self.check_static_variable_prefix())
+        check_results.extend(self.check_global_variable_prefix())
+        check_results.extend(self.check_variable_short_name())
+        check_results.extend(self.check_recursive_call())
+        check_results.extend(self.check_function_blacklist())
+        check_results.extend(self.check_no_break_in_switch())
+        check_results.extend(self.check_no_default_in_switch())
+        return check_results
 
     def check_static_variable_prefix(self)->list:
         """

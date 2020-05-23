@@ -8,12 +8,17 @@ from pycreviewer.coding_rules import CodinfgRules,CheckResult
 
 class TestCodingRules(unittest.TestCase):
     """CodinfgRulesクラステストを記述するクラス
-            正常系のテスト観点：
-                期待する箇所でチェック検出できていること->件数で判断->len(戻り値)
-                msgが正しいこと->固定メッセージ部の部分一致判定
-                idが正しいこと->代表例１件で判定
-                levelが正しいこと->代表例１件で判定
-                coordについてはテストデータの管理が難しいため、ここではチェックしない。専用のテストケースを用意する
+            check_all():
+                 正常系テストの観点:
+                    check_all()の戻り値に各チェック項目IDが一つ以上含まれていることを確認する
+                    (つまり、各チェック項目が実行されていることを確認する)
+            check_all以外：
+                正常系テストの観点：
+                    期待する箇所でチェック検出できていること->件数で判断->len(戻り値)
+                    msgが正しいこと->固定メッセージ部の部分一致判定
+                    idが正しいこと->代表例１件で判定
+                    levelが正しいこと->代表例１件で判定
+                    coordについてはテストデータの管理が難しいため、ここではチェックしない。専用のテストケースを用意する
     """
 
     def setUp(self):
@@ -123,5 +128,13 @@ class TestCodingRules(unittest.TestCase):
     def test_check_no_default_in_switch_none(self):
         check_results = self.rules_none.check_no_default_in_switch()
         self.assertEqual(len(check_results), 0)
-        
+
+    def test_check_all_valid(self):
+        expect_id_set = {'R001','R002','R003','R004','R005','R006','R007'}
+        check_results = self.rules_valid.check_all()
+        check_id_list = []
+        for check_result in check_results:
+            check_id_list.append(check_result.id)
+        check_id_set = set(check_id_list)
+        self.assertEqual(expect_id_set, check_id_set)
             
