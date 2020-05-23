@@ -79,6 +79,22 @@ class CodinfgRules(object):
                 check_results.append(check_result)
         return check_results
 
+    def check_reculsive_call(self):
+        """
+        再起呼び出しを確認する
+        """
+        check_results = []
+        condition = self.condtions.ReculsiveCall()
+        if(not condition):
+            return check_results
+        isChecked = condition.param
+        if(isChecked):
+            calls = self.code.SearchReculsiveFunctionCall()
+            for call in calls:
+                check_result = CheckResult(condition.id, condition.level, call.Name()+'is a recursive call of the function.', call.coord)
+                check_results.append(check_result)            
+        return check_results
+
     def check_function_blacklist(self)->list:
         """
         使用禁止の関数が利用されているか確認する

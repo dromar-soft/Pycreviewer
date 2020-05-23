@@ -68,6 +68,20 @@ class TestCodingRules(unittest.TestCase):
         check_results = self.rules_none.check_variable_short_name()
         self.assertEqual(len(check_results), 0)
 
+    def test_check_reculsive_call_valid(self):
+        expect_id = 'R004'
+        expect_level = 'MUST'
+        expect_msg_part = 'is a recursive call of the function.'
+        check_results = self.rules_valid.check_reculsive_call()
+        self.assertEqual(len(check_results), 6)
+        check_result_example = check_results[0]
+        self.assertTrue(expect_msg_part in check_result_example.msg)
+        self.assertEqual(check_result_example.id, expect_id)
+        self.assertEqual(check_result_example.level, expect_level)
+    def test_check_reculsive_call_none(self):
+        check_results = self.rules_none.check_reculsive_call()
+        self.assertEqual(len(check_results), 0)
+
     def test_check_function_blacklist_valid(self):
         expect_id = 'R005'
         expect_level = 'WANT'

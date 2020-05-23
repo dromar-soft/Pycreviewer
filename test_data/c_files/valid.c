@@ -7,15 +7,15 @@ volatile char l_volatile_char_val3;         //global_variable_prefix NG
 static int m_function_def2(char);
 void g_function_def1(char flag){
     malloc(); //function_blacklist NG
-    g_function_def1();
+    g_function_def1();                      //reculsive_call
     if(flag){
-        g_function_def1();
+        g_function_def1();                  //reculsive_call
     }
     while(true){
-        g_function_def1();
+        g_function_def1();                  //reculsive_call
     }
-    for(int i = 0; i< 10; i++){            //variable_length_min NG
-        g_function_def1();
+    for(int i = 0; i< 10; i++){             //variable_length_min NG
+        g_function_def1();                  //reculsive_call
     }
     switch(flag){
         case 0:
@@ -23,11 +23,11 @@ void g_function_def1(char flag){
         case 1:
             //No Break
         default:
-            g_function_def1();
+            g_function_def1();              //reculsive_call
             break;
     }
     free(); //function_blacklist NG
-    return g_function_def1();
+    return g_function_def1();               //reculsive_call
 }
 static int m_function_def2(char f){         //variable_length_min NG
     while(true){
