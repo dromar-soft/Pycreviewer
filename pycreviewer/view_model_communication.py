@@ -15,8 +15,8 @@ class ViewModelCommunicaton(object):
         self.view_to_model_msg.put(msg)
 
     def send_start_response(self, file_num):
-        print("send_start_response fileNum: + filenum")
-        msg = Message("start_response", filenum)
+        print("send_start_response fileNum: " + str(file_num))
+        msg = Message("start_response", file_num)
         self.model_to_view_msg.put(msg)
 
     def send_cancel_request(self):
