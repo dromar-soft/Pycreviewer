@@ -33,7 +33,7 @@ class TestSourceCode(unittest.TestCase):
         valiables = target.StaticValiables()
         self.assertEqual(len(valiables), 3)
         example = valiables[0]
-        self.assertEqual(example.Name(), 'm_int_val1')
+        self.assertEqual(example.name, 'm_int_val1')
     def test_StaticValiables_None(self):
         target = SourceCode(self.none_ast)
         valiables = target.StaticValiables()
@@ -44,7 +44,7 @@ class TestSourceCode(unittest.TestCase):
         valiables = target.GlobalValiables()
         self.assertEqual(len(valiables), 3)
         example = valiables[0]
-        self.assertEqual(example.Name(), 'g_int_val1')
+        self.assertEqual(example.name, 'g_int_val1')
     def test_GlobalValiables_None(self):
         target = SourceCode(self.none_ast)
         valiables = target.GlobalValiables()
@@ -64,7 +64,7 @@ class TestSourceCode(unittest.TestCase):
         functions = target.DefinedFunctions()
         self.assertEqual(len(functions), 2)
         example = functions[0]
-        self.assertEqual(example.Name(), 'g_function_def1')
+        self.assertEqual(example.name, 'g_function_def1')
     def test_DefinedFunctions_None(self):
         target = SourceCode(self.none_ast)
         functions = target.DefinedFunctions()
@@ -86,7 +86,7 @@ class TestSourceCode(unittest.TestCase):
         funccalls = target.SearchRecursiveFunctionCall()
         self.assertEqual(len(funccalls), 6)
         example = funccalls[0]
-        self.assertEqual(example.Name(), 'g_function_def1')
+        self.assertEqual(example.name, 'g_function_def1')
     def test_SearchRecursiveFunctionCall_None(self):
         target = SourceCode(self.none_ast)
         steps = target.SearchRecursiveFunctionCall()

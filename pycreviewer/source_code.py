@@ -2,154 +2,8 @@
 from pycparser import c_ast
 from pycparser.c_ast import Node
 from pycparser.plyparser import Coord
+from typing import List
 
-class SourceCode(object):
-    """
-    SourceCodeクラスは、ソースコード情報を抽象化し、各要素にアクセスする機能を提供する。
-    SouceCodeクラスは、pycparser.parse()によって生成されたc_astオブジェクトを利用する。
-    """
-
-    def __init__(self, ast):
-        print("SourceCode Obj Created.")
-        self.ast = ast
-
-    def DefinedFunctions(self)->list:
-        """
-        定義された関数の一覧を返す
-        """
-        ret = []
-        for ext in self.ast:
-            if(isinstance(ext, c_ast.FuncDef)):
-                function = Token(ext.decl.name,ext.coord)
-                ret.append(function)
-        return ret
-
-    def SearchFunctionCalls(self, target_funcname:str)->list:
-        """
-        特定の関数がコールされているか検索し、検索結果をFunctionCallオブジェクトのリスト形式で取得する
-        検索のアルゴリズムはは関数名の文字列比較であり、引数や戻り値は考慮しない
-        """
-        ret = []
-        for ext in self.ast:
-            if(isinstance(ext, c_ast.FuncDef)):
-                    v = FuncCallVisitor(target_funcname)
-                    v.visit(ext)
-                    for node in v.visitedList():
-                        token = Token(target_funcname, node.name.coord)
-                        ret.append(token)
-        return ret
-
-    def StaticValiables(self)->list:
-        """
-        静的変数の一覧を返す
-        """
-        ret = []
-        for ext in self.ast:
-            if(hasattr(ext, 'type')):
-                if(isinstance(ext.type, (c_ast.ArrayDecl,c_ast.TypeDecl,c_ast.PtrDecl))):
-                    if(hasattr(ext, 'storage')):
-                        if(ext.storage != []):
-                            if(ext.storage[0] == 'static'):
-                                token = Token(ext.name, ext.coord)
-                                ret.append(token)
-        return ret
-
-    def GlobalValiables(self)->list:
-        """
-        グローバル変数の一覧を返す
-        """
-        ret = []
-        for ext in self.ast:
-            if(hasattr(ext, 'type')):
-                if(isinstance(ext.type, (c_ast.ArrayDecl,c_ast.TypeDecl,c_ast.PtrDecl))):
-                    if(hasattr(ext, 'storage')):
-                        if(ext.storage == []):
-                            token = Token(ext.name, ext.coord)
-                            ret.append(token)
-        return ret
-
-    def __LocalVariables__(self)->list:
-        """
-        ローカル変数(関数引数と関数定義内で宣言された変数）の一覧を返す
-        """
-        ret = []
-        for ext in self.ast:
-            if(isinstance(ext, c_ast.FuncDef)):
-                visitor = VariableDeclVisitor()
-                """
-                main()のように、
-                関数引数がnullの場合、argsがNoneになるため、Noneチェックを行う
-                """
-                if(ext.decl.type.args is not None):
-                    visitor.visit(ext.decl.type.args)   #関数引数を探索
-                visitor.visit(ext.body)             #関数定義内を探索
-                for node in visitor.visitedList():
-                    """
-                    main(void)のように、
-                    引数=void関数の場合、'void'がTypedecl(.declname=None,.coord=None)として探索されてしまうので、チェックではじく
-                    """
-                    if( node.declname and node.coord ):
-                        token = Token(node.declname, node.coord)
-                        ret.append(token)
-        return ret
-
-    def Varialbles(self)->list:
-        """
-        変数宣言の一覧を返す
-        """
-        ret = []
-        global_vars = self.GlobalValiables()  
-        static_vars = self.StaticValiables()
-        local_vars = self.__LocalVariables__()
-        ret.extend(global_vars)
-        ret.extend(static_vars)
-        ret.extend(local_vars)
-        return ret
-
-    def SearchNoBreakInCase(self)->list:
-        """
-        Case文にbreakがない箇所を検索する
-        """
-        ret = []
-        caseVisitor = CaseVisitor()
-        caseVisitor.visit(self.ast)
-        for node in caseVisitor.visitedList():
-            breakVisitor = BreakVisitor()
-            breakVisitor.visit(node)
-            if(len(breakVisitor.visitedList()) == 0):
-                token = Token('Case',node.coord)
-                ret.append(token) 
-        return ret
-
-    def SearchNoDefaultInSwitch(self)->list:
-        """
-        Switch構文内にdefaultがない箇所を検索する      
-        """
-        ret = []
-        switchVistor = SwitchVisitor()
-        switchVistor.visit(self.ast)
-        for node in switchVistor.visitedList():
-            defaultVisitor = DefaultVisitor()
-            defaultVisitor.visit(node)
-            if(len(defaultVisitor.visitedList()) == 0):
-                token = Token('Switch',node.coord)
-                ret.append(token) 
-        return ret
-
-    def SearchRecursiveFunctionCall(self)->list:
-        """
-        再起呼び出し関数を検索する
-        """
-        ret = []
-        for ext in self.ast:
-            if(isinstance(ext, c_ast.FuncDef)):
-                    funcname = ext.decl.name
-                    v = FuncCallVisitor(funcname)
-                    v.visit(ext)
-                    for node in v.visitedList():
-                        token = Token(funcname, node.name.coord)
-                        ret.append(token)
-        return ret
 
 class Token(object):
     """
@@ -176,10 +30,156 @@ class Token(object):
         self.file = coord.file
         self.line = coord.line
         self.column = coord.column
-        self.coord = coord
-    def Name(self):
-        return self.name
-    
+
+Tokens = List[Token]
+
+class SourceCode(object):
+    """
+    SourceCodeクラスは、ソースコード情報を抽象化し、各要素にアクセスする機能を提供する。
+    SouceCodeクラスは、pycparser.parse()によって生成されたc_astオブジェクトを利用する。
+    """
+
+    def __init__(self, ast):
+        print("SourceCode Obj Created.")
+        self.ast = ast
+
+    def DefinedFunctions(self)->Tokens:
+        """
+        定義された関数の一覧を返す
+        """
+        ret = []
+        for ext in self.ast:
+            if(isinstance(ext, c_ast.FuncDef)):
+                function = Token(ext.decl.name,ext.coord)
+                ret.append(function)
+        return ret
+
+    def SearchFunctionCalls(self, target_funcname:str)->Tokens:
+        """
+        特定の関数がコールされているか検索し、検索結果をFunctionCallオブジェクトのリスト形式で取得する
+        検索のアルゴリズムはは関数名の文字列比較であり、引数や戻り値は考慮しない
+        """
+        ret = []
+        for ext in self.ast:
+            if(isinstance(ext, c_ast.FuncDef)):
+                    v = FuncCallVisitor(target_funcname)
+                    v.visit(ext)
+                    for node in v.visitedList():
+                        token = Token(target_funcname, node.name.coord)
+                        ret.append(token)
+        return ret
+
+    def StaticValiables(self)->Tokens:
+        """
+        静的変数の一覧を返す
+        """
+        ret = []
+        for ext in self.ast:
+            if(hasattr(ext, 'type')):
+                if(isinstance(ext.type, (c_ast.ArrayDecl,c_ast.TypeDecl,c_ast.PtrDecl))):
+                    if(hasattr(ext, 'storage')):
+                        if(ext.storage != []):
+                            if(ext.storage[0] == 'static'):
+                                token = Token(ext.name, ext.coord)
+                                ret.append(token)
+        return ret
+
+    def GlobalValiables(self)->Tokens:
+        """
+        グローバル変数の一覧を返す
+        """
+        ret = []
+        for ext in self.ast:
+            if(hasattr(ext, 'type')):
+                if(isinstance(ext.type, (c_ast.ArrayDecl,c_ast.TypeDecl,c_ast.PtrDecl))):
+                    if(hasattr(ext, 'storage')):
+                        if(ext.storage == []):
+                            token = Token(ext.name, ext.coord)
+                            ret.append(token)
+        return ret
+
+    def __LocalVariables__(self)->Tokens:
+        """
+        ローカル変数(関数引数と関数定義内で宣言された変数）の一覧を返す
+        """
+        ret = []
+        for ext in self.ast:
+            if(isinstance(ext, c_ast.FuncDef)):
+                visitor = VariableDeclVisitor()
+                """
+                main()のように、
+                関数引数がnullの場合、argsがNoneになるため、Noneチェックを行う
+                """
+                if(ext.decl.type.args is not None):
+                    visitor.visit(ext.decl.type.args)   #関数引数を探索
+                visitor.visit(ext.body)             #関数定義内を探索
+                for node in visitor.visitedList():
+                    """
+                    main(void)のように、
+                    引数=void関数の場合、'void'がTypedecl(.declname=None,.coord=None)として探索されてしまうので、チェックではじく
+                    """
+                    if( node.declname and node.coord ):
+                        token = Token(node.declname, node.coord)
+                        ret.append(token)
+        return ret
+
+    def Varialbles(self)->Tokens:
+        """
+        変数宣言の一覧を返す
+        """
+        ret = []
+        global_vars = self.GlobalValiables()  
+        static_vars = self.StaticValiables()
+        local_vars = self.__LocalVariables__()
+        ret.extend(global_vars)
+        ret.extend(static_vars)
+        ret.extend(local_vars)
+        return ret
+
+    def SearchNoBreakInCase(self)->Tokens:
+        """
+        Case文にbreakがない箇所を検索する
+        """
+        ret = []
+        caseVisitor = CaseVisitor()
+        caseVisitor.visit(self.ast)
+        for node in caseVisitor.visitedList():
+            breakVisitor = BreakVisitor()
+            breakVisitor.visit(node)
+            if(len(breakVisitor.visitedList()) == 0):
+                token = Token('Case',node.coord)
+                ret.append(token) 
+        return ret
+
+    def SearchNoDefaultInSwitch(self)->Tokens:
+        """
+        Switch構文内にdefaultがない箇所を検索する      
+        """
+        ret = []
+        switchVistor = SwitchVisitor()
+        switchVistor.visit(self.ast)
+        for node in switchVistor.visitedList():
+            defaultVisitor = DefaultVisitor()
+            defaultVisitor.visit(node)
+            if(len(defaultVisitor.visitedList()) == 0):
+                token = Token('Switch',node.coord)
+                ret.append(token) 
+        return ret
+
+    def SearchRecursiveFunctionCall(self)->Tokens:
+        """
+        再起呼び出し関数を検索する
+        """
+        ret = []
+        for ext in self.ast:
+            if(isinstance(ext, c_ast.FuncDef)):
+                    funcname = ext.decl.name
+                    v = FuncCallVisitor(funcname)
+                    v.visit(ext)
+                    for node in v.visitedList():
+                        token = Token(funcname, node.name.coord)
+                        ret.append(token)
+        return ret
 
 class VariableDeclVisitor(c_ast.NodeVisitor):
     """

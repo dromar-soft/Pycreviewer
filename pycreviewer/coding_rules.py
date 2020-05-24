@@ -6,11 +6,13 @@ class CheckResult(object):
     """
     CheckResultクラスは、CodingRulesクラスのコードチェック結果を格納するデータクラスである。
     """
-    def __init__(self, id, level, msg, coord):
+    def __init__(self, id, level, msg, file, line, column):
         self.id = id
         self.level = level
         self.msg = msg
-        self.coord = coord
+        self.file = file
+        self.line = line
+        self.column = column
         print(vars(self))
 
     def output_str(self):
@@ -51,8 +53,8 @@ class CodinfgRules(object):
         variables = self.code.StaticValiables()
         prefix = condition.param
         for variable in variables:
-            if(not variable.Name().startswith(prefix)):
-                check_result = CheckResult(condition.id, condition.level, variable.Name()+' does not have the prefix '+prefix+'.', variable.coord) 
+            if(not variable.name.startswith(prefix)):
+                check_result = CheckResult(condition.id, condition.level, variable.name+' does not have the prefix '+prefix+'.', variable.file, variable.line, variable.column) 
                 check_results.append(check_result)
         return check_results
     
@@ -67,8 +69,8 @@ class CodinfgRules(object):
         variables = self.code.GlobalValiables()
         prefix = condition.param
         for variable in variables:
-            if(not variable.Name().startswith(prefix)):
-                check_result = CheckResult(condition.id, condition.level, variable.Name()+' does not have the prefix '+prefix+'.', variable.coord) 
+            if(not variable.name.startswith(prefix)):
+                check_result = CheckResult(condition.id, condition.level, variable.name+' does not have the prefix '+prefix+'.', variable.file, variable.line, variable.column) 
                 check_results.append(check_result)
         return check_results
 
@@ -83,8 +85,8 @@ class CodinfgRules(object):
         length_min = condition.param
         variables = self.code.Varialbles()
         for variable in variables:
-            if(len(variable.Name()) <= length_min):
-                check_result = CheckResult(condition.id, condition.level, variable.Name()+' is too short a variable name.', variable.coord)
+            if(len(variable.name) <= length_min):
+                check_result = CheckResult(condition.id, condition.level, variable.name+' is too short a variable name.', variable.file, variable.line, variable.column)
                 check_results.append(check_result)
         return check_results
 
@@ -100,7 +102,7 @@ class CodinfgRules(object):
         if(isChecked):
             calls = self.code.SearchRecursiveFunctionCall()
             for call in calls:
-                check_result = CheckResult(condition.id, condition.level, call.Name()+'is a recursive call of the function.', call.coord)
+                check_result = CheckResult(condition.id, condition.level, call.name+'is a recursive call of the function.', call.file, call.line, call.column)
                 check_results.append(check_result)            
         return check_results
 
@@ -113,10 +115,10 @@ class CodinfgRules(object):
         if(not condition):
             return check_results
         for funcname in condition.param:
-            funccalls = self.code.SearchFunctionCalls(funcname)
-            if(len(funccalls) > 0):
-                for funccall in funccalls:
-                    check_result = CheckResult(condition.id, condition.level, funcname+' a is one of function blacklist.', funccall.coord) 
+            calls = self.code.SearchFunctionCalls(funcname)
+            if(len(calls) > 0):
+                for call in calls:
+                    check_result = CheckResult(condition.id, condition.level, funcname+' a is one of function blacklist.', call.file, call.line, call.column) 
                     check_results.append(check_result)
         return check_results
     
@@ -132,7 +134,7 @@ class CodinfgRules(object):
         if(isChecked):
             cases = self.code.SearchNoBreakInCase()
             for case in cases:
-                check_result = CheckResult(condition.id, condition.level, 'No break statement in switch-case statement.', case.coord)
+                check_result = CheckResult(condition.id, condition.level, 'No break statement in switch-case statement.', case.file, case.line, case.column)
                 check_results.append(check_result)
         return check_results
 
@@ -148,6 +150,6 @@ class CodinfgRules(object):
         if(isChecked):
             switches = self.code.SearchNoDefaultInSwitch()
             for switch in switches:
-                check_result = CheckResult(condition.id, condition.level, 'No default statement in switch-case statement.', switch.coord)
+                check_result = CheckResult(condition.id, condition.level, 'No default statement in switch-case statement.', switch.file, switch.line, switch.column)
                 check_results.append(check_result)
         return check_results
