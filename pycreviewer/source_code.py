@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from pycparser import c_ast
 from pycparser.c_ast import Node
+from pycparser.plyparser import Coord
 
 class SourceCode(object):
     """
@@ -19,7 +20,7 @@ class SourceCode(object):
         ret = []
         for ext in self.ast:
             if(isinstance(ext, c_ast.FuncDef)):
-                function = DefinedFunction(ext.decl.name, '', '', ext.coord)
+                function = Token(ext.decl.name,ext.coord)
                 ret.append(function)
         return ret
 
@@ -34,8 +35,8 @@ class SourceCode(object):
                     v = FuncCallVisitor(target_funcname)
                     v.visit(ext)
                     for node in v.visitedList():
-                        funccall = FunctionCall(target_funcname, node.name.coord)
-                        ret.append(funccall)
+                        token = Token(target_funcname, node.name.coord)
+                        ret.append(token)
         return ret
 
     def StaticValiables(self)->list:
@@ -49,8 +50,8 @@ class SourceCode(object):
                     if(hasattr(ext, 'storage')):
                         if(ext.storage != []):
                             if(ext.storage[0] == 'static'):
-                                valiable = Valiable(ext.name, '', ext.coord)
-                                ret.append(valiable)
+                                token = Token(ext.name, ext.coord)
+                                ret.append(token)
         return ret
 
     def GlobalValiables(self)->list:
@@ -63,8 +64,8 @@ class SourceCode(object):
                 if(isinstance(ext.type, (c_ast.ArrayDecl,c_ast.TypeDecl,c_ast.PtrDecl))):
                     if(hasattr(ext, 'storage')):
                         if(ext.storage == []):
-                            valiable = Valiable(ext.name, '', ext.coord)
-                            ret.append(valiable)
+                            token = Token(ext.name, ext.coord)
+                            ret.append(token)
         return ret
 
     def __LocalVariables__(self)->list:
@@ -88,8 +89,8 @@ class SourceCode(object):
                     引数=void関数の場合、'void'がTypedecl(.declname=None,.coord=None)として探索されてしまうので、チェックではじく
                     """
                     if( node.declname and node.coord ):
-                        variable = Valiable(node.declname, '', node.coord)
-                        ret.append(variable)
+                        token = Token(node.declname, node.coord)
+                        ret.append(token)
         return ret
 
     def Varialbles(self)->list:
@@ -116,8 +117,8 @@ class SourceCode(object):
             breakVisitor = BreakVisitor()
             breakVisitor.visit(node)
             if(len(breakVisitor.visitedList()) == 0):
-                case = Case(node.coord)
-                ret.append(case) 
+                token = Token('Case',node.coord)
+                ret.append(token) 
         return ret
 
     def SearchNoDefaultInSwitch(self)->list:
@@ -131,8 +132,8 @@ class SourceCode(object):
             defaultVisitor = DefaultVisitor()
             defaultVisitor.visit(node)
             if(len(defaultVisitor.visitedList()) == 0):
-                swt = Switch(node.coord)
-                ret.append(swt) 
+                token = Token('Switch',node.coord)
+                ret.append(token) 
         return ret
 
     def SearchRecursiveFunctionCall(self)->list:
@@ -146,66 +147,39 @@ class SourceCode(object):
                     v = FuncCallVisitor(funcname)
                     v.visit(ext)
                     for node in v.visitedList():
-                        funccall = FunctionCall(funcname, node.name.coord)
-                        ret.append(funccall)
+                        token = Token(funcname, node.name.coord)
+                        ret.append(token)
         return ret
 
-class DefinedFunction(object):
+class Token(object):
     """
-    Functionクラスは、定義された関数情報を抽象化するデータクラス
+    TokenクラスはC言語の基本要素を抽象化したデータクラスである。
+    Tokenクラスは、name,coordの２つの属性を持つ
+    name:
+        基本要素の名称を格納する。
+        例えば、基本要素が変数名などのSymbolの場合は、そのSymbol名を格納する
+        また、基本要素がbreakなどのキーワードの場合は、キーワード名そのものを格納する
+    __coord:
+        基本要素の記述位置(ファイル名、行、列)を示す。
+        coordの実体はplyparser.Coordクラスのインスタンスである。
+        plyparser.Coordクラスの利用を隠蔽化するため、ファイル名、行、列へのアクセサを実装する。
+    file:
+         基本要素の記述されたファイル名を示す
+    line:
+        基本要素の記述された行位置を示す
+    column:
+        基本要素の記述された列位置を示す
     """
-    def __init__(self, name:str, param, ret, coord):
+    def __init__(self, name:str, coord:Coord):
         self.name = name
-        self.param = param
-        self.ret = ret
+        self.__coord = coord
+        self.file = coord.file
+        self.line = coord.line
+        self.column = coord.column
         self.coord = coord
-    def Name(self)->str:
+    def Name(self):
         return self.name
-    def Param(self)->list:
-        return self.param
-    def Return(self):
-        return self.ret
-    def Coord(self):
-        return self.coord
-
-class FunctionCall(object):
-    """
-    FunctionCallクラスは、関数呼び出し情報を抽象化するデータクラス
-    """
-    def __init__(self, name:str,coord):
-        self.name = name
-        self.coord = coord
-    def Name(self)->str:
-        return self.name
-    def Coord(self):
-        return self.coord
-
-class Case(object):
-    """
-    Caseクラスは、Case構文情報を抽象化するデータクラス
-    """
-    def __init__(self,coord):
-        self.coord = coord
-
-class Switch(object):
-    """
-    Switchクラスは、Switch構文情報を抽象化するデータクラス
-    """
-    def __init__(self,coord):
-        self.coord = coord
-
-class Valiable(object):
-    """
-    Valiableクラスは、変数情報を抽象化するデータクラス
-    """
-    def __init__(self, name:str,type:str, coord):
-        self.name = name
-        self.type = type
-        self.coord = coord
-    def Name(self)->str:
-        return self.name
-    def Coord(self):
-        return self.coord
+    
 
 class VariableDeclVisitor(c_ast.NodeVisitor):
     """
