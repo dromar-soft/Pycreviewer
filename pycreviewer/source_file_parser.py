@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+#------------------------------------------------------------------------------
+# pycreviewer: source_file_parser.py
+# Dromar [https://github.com/dromar-soft]
+# License: MIT
+#------------------------------------------------------------------------------
 from pycparser import parse_file, c_generator, c_ast
 import os
 

@@ -1,5 +1,10 @@
+# -*- coding: utf-8 -*-
+#------------------------------------------------------------------------------
+# pycreviewer: __init__.py
+# Dromar [https://github.com/dromar-soft]
+# License: MIT
+#------------------------------------------------------------------------------
 #print("pycreviewer imported")
-
 from .source_file_parser import parse
 from .source_code import SourceCode
 from .check_conditions import CheckConditions

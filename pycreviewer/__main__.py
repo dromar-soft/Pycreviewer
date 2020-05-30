@@ -1,4 +1,9 @@
 # coding: UTF-8
+#------------------------------------------------------------------------------
+# pycreviewer: __main__.py
+# Dromar [https://github.com/dromar-soft]
+# License: MIT
+#------------------------------------------------------------------------------
 from logging import (getLogger, StreamHandler, INFO, Formatter)
 from threading import (Event, Thread)
 from pathlib import Path

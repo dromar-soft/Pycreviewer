@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+#------------------------------------------------------------------------------
+# pycreviewer: view_model_communication.py
+# Dromar [https://github.com/dromar-soft]
+# License: MIT
+#------------------------------------------------------------------------------
 import queue
 
 class ViewModelCommunicaton(object):

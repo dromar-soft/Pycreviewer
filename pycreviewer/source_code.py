@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+#------------------------------------------------------------------------------
+# pycreviewer: source_code.py
+# Dromar [https://github.com/dromar-soft]
+# License: MIT
+#------------------------------------------------------------------------------
 from pycparser import c_ast
 from pycparser.c_ast import Node
 from pycparser.plyparser import Coord

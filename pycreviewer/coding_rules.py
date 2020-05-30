@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+#------------------------------------------------------------------------------
+# pycreviewer: coding_rules.py
+# Dromar [https://github.com/dromar-soft]
+# License: MIT
+#------------------------------------------------------------------------------
 from .check_conditions import CheckConditions
 from .source_code import SourceCode 
 

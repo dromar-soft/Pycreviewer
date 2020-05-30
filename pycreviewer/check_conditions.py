@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+#------------------------------------------------------------------------------
+# pycreviewer: check_conditions.py
+# Dromar [https://github.com/dromar-soft]
+# License: MIT
+#------------------------------------------------------------------------------
 import json
 
 class Condition(object):
