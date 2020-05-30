@@ -10,22 +10,22 @@ class ViewModelCommunicaton(object):
         self.view_to_model_msg = queue.Queue()
 
     def send_start_request(self, folder_path):
-        print("send_start_request:" + folder_path)
+        #print("send_start_request:" + folder_path)
         msg = Message("start_request", folder_path)
         self.view_to_model_msg.put(msg)
 
-    def send_start_response(self, file_num):
-        print("send_start_response fileNum: " + str(file_num))
-        msg = Message("start_response", file_num)
+    def send_end_response(self, file_num):
+        #print("send_end_response fileNum: " + str(file_num))
+        msg = Message("end_response", file_num)
         self.model_to_view_msg.put(msg)
 
     def send_cancel_request(self):
-        print("send_cancel_request")
+        #print("send_cancel_request")
         msg = Message("cancel_request", None)
         self.view_to_model_msg.put(msg)
 
     def send_cancel_response(self):
-        print("send_cancel_response")
+        #print("send_cancel_response")
         msg = Message("cancel_response", None)
         self.model_to_view_msg.put(msg)
 

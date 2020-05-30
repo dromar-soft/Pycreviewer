@@ -40,7 +40,6 @@ class SourceCode(object):
     """
 
     def __init__(self, ast):
-        print("SourceCode Obj Created.")
         self.ast = ast
 
     def DefinedFunctions(self)->Tokens:

@@ -19,12 +19,12 @@ class TestViewModelCommunicaton(unittest.TestCase):
         self.assertEqual(expect_data, recv_msg.data)
         self.assertEqual(expect_id, recv_msg.id)
 
-    def test_send_recv_start_response(self):
+    def test_send_recv_end_response(self):
         expect_data = 10
-        expect_id = 'start_response'
+        expect_id = 'end_response'
         timeout = 0.1
         vmc = ViewModelCommunicaton()
-        vmc.send_start_response(expect_data)
+        vmc.send_end_response(expect_data)
         recv_msg = vmc.recieve_response_from_model(timeout)
         self.assertEqual(expect_data, recv_msg.data)
         self.assertEqual(expect_id, recv_msg.id)

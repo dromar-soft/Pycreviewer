@@ -13,18 +13,20 @@ logger.addHandler(handler)
 logger.setLevel(INFO)
 
 class CuiView(object):
+    """
+    CuiViewクラスはCUIによるユーザーインタフェース機能を提供する
+    """
 
     def __init__(self, presenter):
         self.presenter = presenter
 
     def ui_main_thread(self):
         
-        logger.info("ui thread start")
+        logger.debug("ui thread start")
 
         sourceFolder = None
         while not sourceFolder:
-            print ('input source folder')
-            sourceFolder = input('>> ')
+            sourceFolder = input('input source folder >> ')
         self.presenter.send_start_request(sourceFolder)
         
         t = Terminal()
@@ -34,7 +36,10 @@ class CuiView(object):
                 if not k :
                     recvMsg = self.presenter.recieve_response_from_model(timeout=0.1)
                     if recvMsg is not None:
-                        logger.info("id:"+recvMsg.id+ " data:"+str(recvMsg.data))
+                        if(recvMsg.id == 'review_results'):
+                            self.__output_review_results(recvMsg.data)
+                        elif(recvMsg.id == 'end_response'):
+                            print( str(recvMsg.data)+' files codereview completed. Please enter esc key.')
                 elif k.is_sequence:
                     if k.name == 'KEY_ESCAPE':
                         self.presenter.send_cancel_request()
@@ -42,10 +47,12 @@ class CuiView(object):
                 else:
                     pass
 
-        logger.info("ui thread end")
+        logger.debug("ui thread end")
 
     def startup(self):
         self.thread = Thread(target=self.ui_main_thread)
         self.thread.start()
 
-    
+    def __output_review_results(self,results):
+        for result in results:
+             print(vars(result))

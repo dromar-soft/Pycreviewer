@@ -26,7 +26,7 @@ if __name__ == "__main__":
     ユーザは'esc'キー入力によって実行中のコードレビューを中止することができる
     """
 
-    print("pycreviewer cui application start")
+    #print("pycreviewer cui application start")
 
     communication = ViewModelCommunicaton()
     view = CuiView(communication)
@@ -63,4 +63,6 @@ if __name__ == "__main__":
         else:
             pass
 
-    print("pycreviewer cui application end")
+    communication.send_end_response(len(source_file_paths))
+    
+    #print("pycreviewer cui application end")

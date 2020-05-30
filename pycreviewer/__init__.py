@@ -1,4 +1,4 @@
-print("pycreviewer imported")
+#print("pycreviewer imported")
 
 from .source_file_parser import parse
 from .source_code import SourceCode
@@ -13,7 +13,7 @@ def review_file(filepath: str, cpp_args=['-E', r'-Ipycreviewer/utils/fake_libc_i
     'cppargs'にはCコンパイラのプリプロセッサ実行時のコマンドライン引数をリスト形式で入力する。
     通常、'cppargs'には、プリプロセッサ実行オプション'-E'と、インクルードオプション'-Ixxxxx'を指定する
     """
-    print("Executing: "+filepath)
+    #print("Executing: "+filepath)
     ast = parse(filepath=filepath,cpp_args=cpp_args)
     code = SourceCode(ast)
     rules = CodinfgRules(code, CheckConditions('./default.json'))

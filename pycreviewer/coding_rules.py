@@ -13,7 +13,7 @@ class CheckResult(object):
         self.file = file
         self.line = line
         self.column = column
-        print(vars(self))
+        #print(vars(self))
 
     def output_str(self):
         return vars(self)
@@ -102,7 +102,7 @@ class CodinfgRules(object):
         if(isChecked):
             calls = self.code.SearchRecursiveFunctionCall()
             for call in calls:
-                check_result = CheckResult(condition.id, condition.level, call.name+'is a recursive call of the function.', call.file, call.line, call.column)
+                check_result = CheckResult(condition.id, condition.level, call.name+' is a recursive call of the function.', call.file, call.line, call.column)
                 check_results.append(check_result)            
         return check_results
 
