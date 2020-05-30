@@ -4,7 +4,7 @@ from .source_code import SourceCode
 
 class CheckResult(object):
     """
-    CheckResultクラスは、CodingRulesクラスのコードチェック結果を格納するデータクラスである。
+    The CheckResult class is a data class that stores the results of code checks in the CodingRules class.
     """
     def __init__(self, id, level, msg, file, line, column):
         self.id = id
@@ -20,9 +20,9 @@ class CheckResult(object):
 
 class CodinfgRules(object):
     """
-    CodingRulesクラスはコーディングルールを抽象化し、コードが各ルールに逸脱していないかをチェックする機能を持つ。
-    チェック対象となるコード情報は、SourceCodeオブジェクトを参照し取得する。
-    各種ルールに対する詳細なチェック条件を取得するために、CodgingRulesクラスは、CheckConditionオブジェクトを参照する。
+    The CodingRules class abstracts coding rules and checks whether the code deviates from each rule or not.
+    The code information to be checked is obtained by referring to the SourceCode object.
+    The BookingRules class refers to the CheckCondition object in order to get detailed check conditions for various rules.
     """
     def __init__(self, code:SourceCode, condtions:CheckConditions):
         self.code = code
@@ -30,7 +30,7 @@ class CodinfgRules(object):
 
     def check_all(self):
         """
-        全コーディングルールのチェックを実行する
+        Run a check for all coding rules
         """
         check_results = []
         check_results.extend(self.check_static_variable_prefix())
@@ -44,7 +44,7 @@ class CodinfgRules(object):
 
     def check_static_variable_prefix(self)->list:
         """
-        静的変数の接頭辞を確認する
+        Checking the prefix of static variables
         """
         check_results = []
         condition = self.condtions.StaticVariablePrefix()
@@ -60,7 +60,7 @@ class CodinfgRules(object):
     
     def check_global_variable_prefix(self)->list:
         """
-        グローバル変数の接頭辞を確認する
+        Checking the prefix of global variables
         """
         check_results = []
         condition = self.condtions.GlobalVariablePrefix()
@@ -76,7 +76,7 @@ class CodinfgRules(object):
 
     def check_variable_short_name(self)->list:
         """
-        名前が短い変数を確認する
+        Checking variables with short names
         """
         check_results = []
         condition = self.condtions.VariableShortName()
@@ -92,7 +92,7 @@ class CodinfgRules(object):
 
     def check_recursive_call(self):
         """
-        再起呼び出しを確認する
+        Checking recursive call.
         """
         check_results = []
         condition = self.condtions.RecursiveCall()
@@ -108,7 +108,7 @@ class CodinfgRules(object):
 
     def check_function_blacklist(self)->list:
         """
-        使用禁止の関数が利用されているか確認する
+        Check if an off-limits function is being used.
         """
         check_results = []
         condition = self.condtions.FunctionBlackList()
@@ -124,7 +124,7 @@ class CodinfgRules(object):
     
     def check_no_break_in_switch(self)->list:
         """
-        Switch-Case文内にbreak文がない箇所を確認する。
+        Verify that there is no break statement in the Switch-Case statement.
         """
         check_results = []
         condition = self.condtions.NoBreakInSwitch()
@@ -140,7 +140,7 @@ class CodinfgRules(object):
 
     def check_no_default_in_switch(self)->list:
         """
-        Switch文中にDefault文がない箇所を確認する
+        Checking the absence of the default statement in the Switch statement.
         """
         check_results = []
         condition = self.condtions.NoDefaultInSwitch()

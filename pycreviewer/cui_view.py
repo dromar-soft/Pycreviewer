@@ -14,7 +14,7 @@ logger.setLevel(INFO)
 
 class CuiView(object):
     """
-    CuiViewクラスはCUIによるユーザーインタフェース機能を提供する
+    The CuiView class provides user interface functionality with CUI.
     """
 
     def __init__(self, presenter):

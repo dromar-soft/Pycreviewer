@@ -2,7 +2,7 @@ import json
 
 class Condition(object):
     """
-    Conditionクラスは、単一のチェック条件に関するデータクラスである
+    The Condition class is a data class for a single check condition.
     """
     def __init__(self,_id,param,level):
         self.id = _id

@@ -20,10 +20,10 @@ def search_csource_abs_paths(source_folder: str) ->list:
 
 if __name__ == "__main__":
     """
-    pycreviewerライブラリを使用した簡単なCUIアプリケーション機能を提供する
-    本アプリケーションは、コンソール上でレビュー対象のソースフォルダパスの入力を受け付ける。
-    フォルダパスの入力受付後、フォルダパス内にある'.c'ファイルを再起的に検索し、各ファイルについてreview_file()を実行する。
-    ユーザは'esc'キー入力によって実行中のコードレビューを中止することができる
+    Provides simple CUI application functionality using the pycreviewer library.
+    This application accepts the input of the source folder path to be reviewed on the console.
+    After the folder path input is accepted, the '.c' file in the folder path is retrieved recursively and the review_file() is executed for each file.
+    The user can abort a running code review by entering the 'esc' key.
     """
 
     #print("pycreviewer cui application start")
@@ -64,5 +64,5 @@ if __name__ == "__main__":
             pass
 
     communication.send_end_response(len(source_file_paths))
-    
+
     #print("pycreviewer cui application end")
