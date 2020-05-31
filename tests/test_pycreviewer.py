@@ -13,7 +13,7 @@ class TestPyCReviewer(unittest.TestCase):
     def test_pycreviewer_review_file_valid(self):
         expect_id_set = {'R001','R002','R003','R004','R005','R006','R007'}
         review_file_path = './test_data/c_files/valid.c'
-        check_results = pycreviewer.review_file(filepath=review_file_path)
+        check_results = pycreviewer.review_file(sourcefile=review_file_path)
         check_id_list = []
         for check_result in check_results:
             check_id_list.append(check_result.id)
@@ -22,5 +22,5 @@ class TestPyCReviewer(unittest.TestCase):
 
     def test_pycreviewer_review_file_none(self):
         review_file_path = './test_data/c_files/none.c'
-        check_results = pycreviewer.review_file(filepath=review_file_path)
+        check_results = pycreviewer.review_file(sourcefile=review_file_path)
         self.assertEqual(len(check_results), 0)
