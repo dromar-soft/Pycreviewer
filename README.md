@@ -14,12 +14,68 @@ The reviewer can focus on the essential review.
 ## Coding rules
 
 ### Static variable name prefix
+
+Check that the static variable name has a specific prefix (e.g., 'm_').
+
+```c
+#inclide <stdio.h>
+static int m_var;
+```
+
 ### Global variable name prefix
+
+Check that the global variable name has a specific prefix (e.g. 'g_').
+
+```c
+#inclide <stdio.h>
+int g_var;
+```
+
 ### Too short variable name
+
+Detects variable names that are too short.
+
+```c
+int i;
+```
+
 ### Recursive call
+
+Detects a recall of a function.
+
 ### Function blacklist
+
+Detects a disallowed function call.
+(The disallowed functions are set in the JSON file described later)
+
 ### No break statement in the switch-case statement
+
+Detects a part of the switch-case statement that does not contain a break() statement.
+
+```c
+    switch(flag){
+        case 0:
+            break;
+        case 1:
+            //No Break
+        default:
+            break;
+    }
+```
+
 ### No default statement in switch statement
+
+Detects a part of the switch statement where the default statement is not defined.
+
+```c
+        switch(f){
+            case 0:
+                break;
+            case 1:
+                break;
+            //No Default
+        }
+```
 
 ## Check conditions of coding rules(JSON file)
 
